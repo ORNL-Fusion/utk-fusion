@@ -1,0 +1,2 @@
+# SOLPS-ITER Plotting
+This is currently a works in progress, though the intial structure of how to plot some SOLPS data in Python is provided. Much of the code was shared by Eric Emdee, so if anyone finds themselves wanting more, it may be worthwhile getting in touch with him about the SOLPS-ITER Python plotting scripts he was developing. Otherwise you can learn how to plot data the standard way with b2plot.
