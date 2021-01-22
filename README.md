@@ -18,3 +18,11 @@ Contains useful tools related to DIII-D data access, such as pulling and filteri
 
 ## misc
 Contains collection of miscellaneous scripts related to structuring LAMS experimental data.
+
+
+## Instructions on linking localhost to atlas
+When not on the DIII-D network, you will need to link localhost (i.e., your computer) to atlas so that you can use MDSplus to pull data from the server. This can easily be done if you are running Linux or Ubuntu on Windows 10 (WSL). Simply open up another terminal and enter:
+```
+ssh -Y -p 2039 -L 8000:atlas.gat.com:8000 username@cybele.gat.com
+```
+It will prompt you for your cybele password. Just leave this terminal open and you should be able to access the MDSplus data stored on atlas. This has not been tested with Putty, but try and it update this README if it works. 
