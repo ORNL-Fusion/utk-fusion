@@ -16,7 +16,8 @@ def get_fs_data(shot, tag="FS04"):
     return ga_obj.xdata, ga_obj.zdata
 
 
-def calc_freq(time, signal, tag="FS04", time_window=[2000, 4500], distance=200, height=1e16, verbal=True):
+def calc_freq(time, signal, tag="FS04", time_window=[2000, 4500], distance=200,
+             height=1e16, verbal=True):
     """
     """
 
