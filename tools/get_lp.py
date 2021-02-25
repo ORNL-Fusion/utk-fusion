@@ -154,7 +154,7 @@ def get_dict_of_lps(shot, tunnel=True):
     return lps
 
 def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
-             bins=5, tunnel=True, csv_path=None):
+             bins=5, tunnel=True, csv_path=None, up=False):
     """
     Plot LP data, with optional filtering applied.
 
@@ -171,6 +171,7 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
     tunnel (bool): Whether to tunnel through atlas or not. If True, require ssh
       linking atlas ot localhost.
     csv_path (str): Optional path to save data to as a csv file.
+    up (bool)
     """
 
     # Load lp data.
@@ -278,7 +279,7 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
     fig = plt.figure(figsize=(15,7))
 
     # Function for plotting.
-    def plot_ax(fig, x, y, ylabel, ax_num, high_y, xlabel, xlim, legend=False):
+    def plot_ax(fig, x, y, ylabel, ax_num, high_y, xlabel, xlim, legend=False, up=False):
         ax = fig.add_subplot(ax_num)
 
         # For each data point assign correct color.
@@ -345,7 +346,7 @@ def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_ydata="jsat fixed
     other probes for example).
 
     Is this function flawproof? Absolutely not! But hopefully you can mess with
-    it enough to get a good fit, which you can afterwards do oe more round of
+    it enough to get a good fit, which you can afterwards do one more round of
     manual tickering on where the exponential and gaussian fits don't overlap.
 
     lp_xl_path (str): Path to Excel file where you have manually organized
@@ -432,20 +433,31 @@ def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_ydata="jsat fixed
     fig.tight_layout()
     fig.show()
 
-    # Just return the results of the fit with points 0.0005 psin apart..
-    psin_fit = np.array([])
-    y_fit = np.array([])
+    # Just return the results of the fit with points 0.0005 psin apart.
+    #psin_fit = np.arange(psin.min(), psin.max(), 0.0005)
+    psin_fit = np.linspace(psin.min(), psin.max(), 100)
+    y_fit = np.zeros(len(psin_fit))
+
+    center_idx = np.where(np.logical_and(psin_fit > psin[center][0], psin_fit < psin[center][-1]))[0]
+    y_fit[center_idx] = gauss_conv_exp_fit(psin_fit[center_idx], *center_popt)
+
     if len(psin[left]) > 0:
-        psin_fit_left = np.arange(psin[left].min(), psin[left].max(), 0.0005)
-        psin_fit = np.append(psin_fit, psin_fit_left)
-        y_fit = np.append(y_fit, exp_fit_left(psin_fit_left, *left_popt))
+        left_idx = np.where(psin_fit < psin[left].max())[0]
+        y_fit[left_idx] = exp_fit_left(psin_fit[left_idx], *left_popt)
+
+        # The points in between the fits just put in a linear fit between the
+        # last two points.
+        l = left_idx[-1]
+        c = center_idx[0] + 1
+        m = (y_fit[c] - y_fit[l]) / (psin_fit[c] - psin_fit[l])
+        y_fit[l:c] = m * (psin_fit[l:c] - psin_fit[l]) + y_fit[l]
+
     if len(psin[right]) > 0:
-        psin_fit_right = np.arange(psin[right].min(), psin[right].max(), 0.0005)
-        psin_fit = np.append(psin_fit, psin_fit_right)
-        y_fit = np.append(y_fit, exp_fit_right(psin_fit_right, *right_popt))
+        right_idx = np.where(psin_fit > psin[right].min())[0]
+        y_fit[right_idx] = exp_fit_right(psin_fit[right_idx], *right_popt)
+        r = right_idx[0] + 1
+        c = center_idx[-1]
+        m = (y_fit[r] - y_fit[c]) / (psin_fit[r] - psin_fit[c])
+        y_fit[c:r] = m * (psin_fit[c:r] - psin_fit[c]) + y_fit[c]
 
-    psin_fit_center = np.arange(psin[center].min(), psin[center].max(), 0.0005)
-    psin_fit = np.append(psin_fit, psin_fit_center)
-    y_fit = np.append(y_fit, gauss_conv_exp_fit(psin_fit_center, *center_popt))
-
-    return psin_fit, y_fit
+    return {"psin_fit":psin_fit, "y_fit":y_fit, "psin":psin, "y":y}
