@@ -171,7 +171,7 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
     tunnel (bool): Whether to tunnel through atlas or not. If True, require ssh
       linking atlas ot localhost.
     csv_path (str): Optional path to save data to as a csv file.
-    up (bool)
+    up (bool): If True only plot upper probes.
     """
 
     # Load lp data.
@@ -187,6 +187,7 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
     r_filt        = []
     z_filt        = []
     ground_filt   = []
+    up_probe      = []
 
     # Go through one probe at a time to get data for plotting.
     print("\nBinning and filtering data...")
@@ -257,6 +258,13 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
             r_filt.append(lps[key]['rprobe'])
             z_filt.append(lps[key]['zprobe'])
 
+            # Assign if this is a lower or upper probe.
+            pname = int(key[6:])
+            if np.logical_and(pname>=57, pname<=112):
+                up_probe.append(True)
+            else:
+                up_probe.append(False)
+
     # Enumerate the pnames so they can be used for color selection.
     pnames_enum = np.array(list(enumerate(np.unique(pnames_filt))))
 
@@ -289,6 +297,12 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
                     color = int(pnames_pair[0])
                     label = pnames_pair[1]
 
+            if up:
+                if up_probe[i]:
+                    pass
+                else:
+                    continue
+
             ax.plot(x[i], y[i], '^', ms=10, color=tableau20[color], label=label.title())
             ax.set_xlabel(xlabel, fontsize=18)
             ax.set_ylabel(ylabel, fontsize=18)
@@ -318,9 +332,9 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
     elif xtype == 'time':
         xlabel = 'Time (ms)'
 
-    plot_ax(fig, x_filt, te_filt, 'Te (eV)', 131, 50, xlabel, xlim, legend=True)
-    plot_ax(fig, x_filt, ne_filt, 'ne (cm-3)', 132, 10e13, xlabel, xlim)
-    plot_ax(fig, x_filt, jsat_filt, 'jsat (A/cm2)', 133, 100, xlabel, xlim)
+    plot_ax(fig, x_filt, te_filt, 'Te (eV)', 131, 50, xlabel, xlim, legend=True, up=up)
+    plot_ax(fig, x_filt, ne_filt, 'ne (cm-3)', 132, 10e13, xlabel, xlim, up=up)
+    plot_ax(fig, x_filt, jsat_filt, 'jsat (A/cm2)', 133, 100, xlabel, xlim, up=up)
     fig.tight_layout()
     fig.show()
 
