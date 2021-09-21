@@ -350,8 +350,9 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
 
     return lp_dict
 
-def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_ydata="jsat fixed (A/cm2)",
-    gauss_range=[1.0, 1.04], ylabel=None):
+def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_xdata="psin",
+    lp_xl_ydata="jsat fixed (A/cm2)", gauss_range=[1.0, 1.04], ylabel=None,
+    skiprows=0):
     """
     To get to the point where you would want to use this function probably
     requires a little manual labor. Supply here an Excel file where you have
@@ -372,6 +373,7 @@ def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_ydata="jsat fixed
     gauss_range (list, float): Between these psin values fit to a convoluted
       gaussian. Outside, fit to exponentials.
     ylabel (str): ylabel for the plot.
+    skiprows (int): For the pd.read_excel function.
     """
 
     # The fitting functions.
@@ -387,8 +389,8 @@ def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_ydata="jsat fixed
           fx)) * erfc(width/(2*lambda_n*fx) - (s-s0)/width)
 
     # Load Excel file and pull out the data for the fitting.
-    df = pd.read_excel(lp_xl_path, sheet_name=lp_xl_sheet)
-    psin = df["psin"].values
+    df = pd.read_excel(lp_xl_path, sheet_name=lp_xl_sheet, skiprows=skiprows)
+    psin = df[lp_xl_xdata].values
     y = df[lp_xl_ydata].values
 
     # Sort the data.
