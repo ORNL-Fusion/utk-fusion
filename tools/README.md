@@ -75,3 +75,4 @@ This script has only been tested to work correctly with the STL file 20210826_ve
 4. Click run. On the terminal it will tell you to run a command. Don't do that yet! In your directory open up the MAFOT shell script mafot.sbatch.
 5. After \_lam.dat include **-W mafot_3D_wall.dat** (assuming you've already moved this file to the working directory on iris). 
 6. Then run the command given by the GUI. You can check progress via **squeue -u $USER** and looking at the **batch_mafot.out** file.
+7. The file lam_[file\_tag].dat will contain the connection lengths.
