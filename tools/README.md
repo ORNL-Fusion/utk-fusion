@@ -67,4 +67,11 @@ shawn@karen: python3 generate_3d_wall_for_mafot.py "/path/to/file.stl"
 # that disconnects a continuous wall.
 shawn@karen: python3 generate_3d_wall_for_mafot.py "/path/to/file.stl" true
 ```
-This script has only been tested to work correctly with the STL file 20210826_vessel_mesh.stl. Future meshes could require code development.
+This script has only been tested to work correctly with the STL file 20210826_vessel_mesh.stl. Future meshes could require code development. To run MAFOT with the generated input file, the steps are:
+
+1. On iris, **module load mafot** and then **mafot_gui.py**.
+2. Fill out the top section of the GUI, and then at the bottom select the dtlaminar tab.
+3. Fill out this tab accordingly with the coordinates and such. Hint: For MiMES tor. Angle = -240. 
+4. Click run. On the terminal it will tell you to run a command. Don't do that yet! In your directory open up the MAFOT shell script mafot.sbatch.
+5. After \_lam.dat include **-W mafot_3D_wall.dat** (assuming you've already moved this file to the working directory on iris). 
+6. Then run the command given by the GUI. You can check progress via **squeue -u $USER** and looking at the **batch_mafot.out** file.
