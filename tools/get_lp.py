@@ -390,8 +390,12 @@ def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_xdata="psin",
 
     # Load Excel file and pull out the data for the fitting.
     df = pd.read_excel(lp_xl_path, sheet_name=lp_xl_sheet, skiprows=skiprows)
-    psin = df[lp_xl_xdata].values
-    y = df[lp_xl_ydata].values
+    try:
+        psin = df[lp_xl_xdata].values
+        y = df[lp_xl_ydata].values
+    except KeyError as e:
+        print(e)
+        print("Options are: {}".format(df.columns))
 
     # Sort the data.
     sidx = np.argsort(psin)

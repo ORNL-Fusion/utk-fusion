@@ -2,10 +2,9 @@
 # cross section of it at every degree formatted for MAFOT. This file is then
 # passed into MAFOT via the -W flag.
 #
-# Example usage: python3 generate_3d_wall_for_mafot path_to_stl_file [num_coordinates]
+# Example usage: python3 generate_3d_wall_for_mafot path_to_stl_file [make_gif]
 #   - path_to_stl_file is the full path to the STL mesh file.
-#   - num_coordinates is how many coordinates you would like each cross section
-#      to have.
+#   - make_gif is whether or not to produce a gif showing the wall at each angle
 import sys
 import math
 import trimesh
@@ -14,7 +13,6 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
-
 
 
 # Sort points poloidally.
@@ -88,6 +86,7 @@ def main(stl_path, angle_step=1.0, make_gif=False):
     polys.append(Polygon([(1.45, 1.08),  (1.45, 1.30),  (1.55, 1.30),  (1.55, 1.08)]))
     polys.append(Polygon([(1.20, 1.12),  (1.38, 1.14),  (1.47, 1.38),  (1.20, 1.38)]))
     polys.append(Polygon([(1.32, 1.28),  (1.32, 1.38),  (1.44, 1.38),  (1.44, 1.28)]))
+    polys.append(Polygon([(1.69, 0.95),  (1.69, 1.33),  (2.21, 1.33),  (2.21, 0.95)]))
 
     # We want to take slices of the 3D volume to get a successive sequence of
     # 2D cross-sections, one at each degree. We do this by giving trimesh the
@@ -157,6 +156,9 @@ def main(stl_path, angle_step=1.0, make_gif=False):
 
         # Re-sort the UOB area.
         r, z = sort_polar((1.32, 1.32), r, z, polys[5])
+
+        # Re-sort this top port area.
+        r, z = sort_polar((1.95, 1.00), r, z, polys[6])
 
         # Machine coordinates are clockwise so 360 - phi.
         phi_mach = 360 - deg
