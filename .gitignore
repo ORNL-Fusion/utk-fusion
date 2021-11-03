@@ -130,3 +130,9 @@ dmypy.json
 
 # Excel files.
 .xlsx
+
+# Misc. files that get created by scripts and ipython.
+.DS_Store
+*.bound
+*.ipynb
+*.gif
