@@ -7,6 +7,7 @@ import MDSplus as mds
 import numpy   as np
 import pandas  as pd
 import matplotlib.pyplot as plt
+from matplotlib.colors import BoundaryNorm
 from scipy.optimize import curve_fit
 from scipy.special import erfc
 
@@ -350,6 +351,111 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
 
     return lp_dict
 
+def plot_contours(lp_dict, tstart, tend, region="sas", filter_type="median",
+    filter_window=201, te_vmin=None, te_vmax=None, show_locs=False):
+    """
+    Plot contours of the profiles with respect to the separatrix.
+    """
+
+    # Based on region select the right probes.
+    data = {}
+    if region == "sas":
+        for pname in lp_dict.keys():
+            label = lp_dict[pname]["label"].strip()
+            print(label)
+            if label in ["A15", "A16", "A17", "A18", "A19", "A20", "A21", "A22"]:
+                continue
+            elif label[0] == "A":
+                data[pname] = lp_dict[pname]
+
+    if filter_type == "median":
+        from scipy.signal import medfilt
+        filter = medfilt
+
+    # Construct full arrays consisting of the coordinates time, psin and the
+    # measurement.
+    time = []
+    psin = []
+    te = []
+    jsat = []
+    labels = []
+    pnames = []
+    te_raw = []
+    jsat_raw = []
+    print("Filtering data...")
+    for pname in data.keys():
+
+        t = data[pname]["time"]
+        keep = np.where(np.logical_and(t>=tstart, t<=tend))[0]
+        time = np.append(time, data[pname]["time"][keep])
+        psin = np.append(psin, data[pname]["psin"][keep])
+        te = np.append(te, filter(data[pname]["temp"][keep], filter_window))
+        te_raw = np.append(te_raw, data[pname]["temp"][keep])
+        jsat = np.append(jsat, filter(data[pname]["jsat"][keep], filter_window))
+        jsat_raw = np.append(jsat_raw, data[pname]["temp"][keep])
+        labels = np.append(labels, np.full(len(keep), data[pname]["label"].strip()))
+        pnames = np.append(pnames, np.full(len(keep), pname))
+    time = np.array(time).flatten()
+    psin = np.array(psin).flatten()
+    te = np.array(te).flatten()
+    jsat = np.array(jsat).flatten()
+    labels = labels.flatten()
+    pnames = pnames.flatten()
+
+    if type(te_vmin) == type(None):
+        te_vmin = te.min()
+    if type(te_vmax) == type(None):
+        te_vmax = te.max()
+    te = np.clip(te, te_vmin, te_vmax)
+    #print(te_vmin)
+    #print(te_vmax)
+
+
+    print("Creating triangle contour plots...")
+    bounds = np.linspace(te_vmin, te_vmax, 20)
+    norm = BoundaryNorm(bounds, len(bounds))
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8), sharex=True, sharey=True)
+    ax1.set_facecolor("grey")
+    ax2.set_facecolor("grey")
+
+    cont1 = ax1.tricontourf(time, psin, te, cmap="hot", vmin=te_vmin, vmax=te_vmax)
+    ax1.tricontour(time, psin, te, levels=[10], colors="k", linestyles="--", linewidths=2)
+    ax1.axhline(1.0, color="k", lw=3)
+    ax1.set_ylabel("Psin")
+    cbar1 = fig.colorbar(cont1, ax=ax1, norm=norm, boundaries=bounds)
+    cbar1.set_label("Te (eV)")
+    if show_locs:
+        ax1.plot(time, psin, color="k")
+
+    cont2 = ax2.tricontourf(time, psin, jsat, cmap="winter")
+    ax2.axhline(1.0, color="k", lw=3)
+    ax2.set_xlabel("Time (ms)")
+    ax2.set_ylabel("Psin")
+    cbar2 = fig.colorbar(cont2, ax=ax2)
+    cbar2.set_label("jsat (A/cm2)")
+
+    fig.tight_layout()
+    fig.show()
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
+    for pname in np.unique(pnames):
+        mask = pnames == pname
+        ax1.plot(time[mask], te[mask], label=labels[mask][0])
+        ax2.plot(time[mask], jsat[mask], label=labels[mask][0])
+
+    ax1.set_xlabel("Time (ms)")
+    ax1.set_ylabel("Te (eV)")
+    ax2.set_ylabel("jsat (A/cm2)")
+    ax1.legend()
+
+    fig.tight_layout()
+    fig.show()
+
+    return {"time":time, "psin":psin, "te":te, "jsat":jsat, "pnames":pnames,
+        "labels":labels, "te_raw":te_raw, "jsat_raw":jsat_raw}
+
+
+
 def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_xdata="psin",
     lp_xl_ydata="jsat fixed (A/cm2)", gauss_range=[1.0, 1.04], ylabel=None,
     skiprows=0):
@@ -453,7 +559,7 @@ def fit_conv_gauss(lp_xl_path, lp_xl_sheet="Data Fixed", lp_xl_xdata="psin",
     fig.tight_layout()
     fig.show()
 
-    # Just return the results of the fit with points 0.0005 psin apart.
+    # Just return the results of the fit with points 0.0005 psin a.
     #psin_fit = np.arange(psin.min(), psin.max(), 0.0005)
     psin_fit = np.linspace(psin.min(), psin.max(), 100)
     y_fit = np.zeros(len(psin_fit))
