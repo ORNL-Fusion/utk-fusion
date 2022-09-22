@@ -28,7 +28,11 @@ def get_mds_active_probes(shot, tunnel=True):
 
     tmin = conn.get("\LANGMUIR::TOP.TMIN").data()
     tmax = conn.get("\LANGMUIR::TOP.TMAX").data()
-    runid = conn.get("\LANGMUIR::TOP.RUNID").data()
+    try:
+        runid = conn.get("\LANGMUIR::TOP.RUNID").data()
+    except:
+        print("Error loading RUNID")
+        runid = "N/A"
 
     mds_index = []
     found_probes = []
@@ -147,15 +151,19 @@ def get_dict_of_lps(shot, tunnel=True):
     # Get a dictionary of each probe data, then store it all in one big dictionary.
     lps = {}
     for mds_index in active["mds_index"]:
-        lp_data = get_mds_lp_data(shot, mds_index, tunnel=tunnel)
-        probe_name = "probe " + str(lp_data["pnum"])
-        lps[probe_name] = lp_data
-        print("Data stored for " + str(probe_name) + " (MDS index " + str(mds_index) + ").")
+        try:
+            lp_data = get_mds_lp_data(shot, mds_index, tunnel=tunnel)
+            probe_name = "probe " + str(lp_data["pnum"])
+            lps[probe_name] = lp_data
+            print("Data stored for " + str(probe_name) + " (MDS index " + str(mds_index) + ").")
+        except Exception as e:
+            print("Error loading data for mds index {}".format(mds_index))
+            print("Exception: {}".format(e))
 
     return lps
 
 def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
-             bins=5, tunnel=True, csv_path=None, up=False):
+             bins=5, tunnel=True, csv_path=None, up=False, showplot=True):
     """
     Plot LP data, with optional filtering applied.
 
@@ -189,6 +197,8 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
     z_filt        = []
     ground_filt   = []
     up_probe      = []
+    labels_filt   = []
+    t_filt        = []
 
     # Go through one probe at a time to get data for plotting.
     print("\nBinning and filtering data...")
@@ -198,6 +208,11 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
         times = lps[key]['time']
         idx = np.logical_and(times > tmin, times < tmax)
         times = times[idx]
+
+        # If we get here and there's no data, continue to the next one.
+        if len(times) == 0:
+            print("Error! Probe {} has no data.".format(key))
+            continue
 
         # Get Te, ne and jsat. Also get R-Rsep out.
         te       = lps[key]['temp'][idx]
@@ -216,7 +231,7 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
             print("Error in xtype entry. Must be either rminrsep or psin.")
 
         # Put into one array so we can sort them all by rminrsep, low -> high.
-        probe_data = np.array((x, te, ne, jsat, heatflux, ground))
+        probe_data = np.array((x, te, ne, jsat, heatflux, ground, times))
         probe_data = probe_data[:, np.argsort(probe_data[0])]
 
         # If one simply wants all the data (probably messy but maybe for
@@ -237,6 +252,8 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
             tmp_jsat     = probe_data[3][bin_size*bin:bin_size*(bin+1)]
             tmp_heatflux = probe_data[4][bin_size*bin:bin_size*(bin+1)]
             tmp_ground   = probe_data[5][bin_size*bin:bin_size*(bin+1)]
+            tmp_t        = probe_data[6][bin_size*bin:bin_size*(bin+1)]
+            #print(tmp_t)
 
             # Apply the preferred filter.
             if filter == 'median':
@@ -253,11 +270,13 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
             jsat_filt.append(filter(tmp_jsat))
             heatflux_filt.append(filter(tmp_heatflux))
             ground_filt.append(filter(tmp_ground))
+            #t_filt.append(tmp_t.mean())
 
             # Assign probe names so we can identify these data points later.
             pnames_filt.append(key)
             r_filt.append(lps[key]['rprobe'])
             z_filt.append(lps[key]['zprobe'])
+            labels_filt.append(lps[key]["label"])
 
             # Assign if this is a lower or upper probe.
             pname = int(key[6:])
@@ -266,83 +285,86 @@ def plot_lps(shot, tmin, tmax, xtype='rminrsep', xlim=None, filter='median',
             else:
                 up_probe.append(False)
 
-    # Enumerate the pnames so they can be used for color selection.
-    pnames_enum = np.array(list(enumerate(np.unique(pnames_filt))))
+    if showplot:
 
-    # General plotting commands. These are the "Tableau 20" colors as RGB.
-    tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
-                 (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
-                 (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
-                 (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
-                 (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
+        # Enumerate the pnames so they can be used for color selection.
+        pnames_enum = np.array(list(enumerate(np.unique(pnames_filt))))
 
-    # A nice looking font.
-    #plt.rcParams['font.family'] = 'serif'
+        # General plotting commands. These are the "Tableau 20" colors as RGB.
+        tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
+                     (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
+                     (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
+                     (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
+                     (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
 
-    # Scale the RGB values to the [0, 1] range, which is the format matplotlib accepts.
-    for i in range(len(tableau20)):
-        r, g, b = tableau20[i]
-        tableau20[i] = (r / 255., g / 255., b / 255.)
+        # A nice looking font.
+        #plt.rcParams['font.family'] = 'serif'
 
-    # Create figure.
-    fig = plt.figure(figsize=(15,7))
+        # Scale the RGB values to the [0, 1] range, which is the format matplotlib accepts.
+        for i in range(len(tableau20)):
+            r, g, b = tableau20[i]
+            tableau20[i] = (r / 255., g / 255., b / 255.)
 
-    # Function for plotting.
-    def plot_ax(fig, x, y, ylabel, ax_num, high_y, xlabel, xlim, legend=False, up=False):
-        ax = fig.add_subplot(ax_num)
+        # Create figure.
+        fig = plt.figure(figsize=(15,7))
 
-        # For each data point assign correct color.
-        for i in range(0, len(x)):
-            for pnames_pair in pnames_enum:
-                if pnames_pair[1] == pnames_filt[i]:
-                    color = int(pnames_pair[0])
-                    label = pnames_pair[1]
+        # Function for plotting.
+        def plot_ax(fig, x, y, ylabel, ax_num, high_y, xlabel, xlim, legend=False, up=False):
+            ax = fig.add_subplot(ax_num)
 
-            if up:
-                if up_probe[i]:
-                    pass
-                else:
-                    continue
+            # For each data point assign correct color.
+            for i in range(0, len(x)):
+                for pnames_pair in pnames_enum:
+                    if pnames_pair[1] == pnames_filt[i]:
+                        color = int(pnames_pair[0])
+                        label = pnames_pair[1]
 
-            ax.plot(x[i], y[i], '^', ms=10, color=tableau20[color], label=label.title())
-            ax.set_xlabel(xlabel, fontsize=18)
-            ax.set_ylabel(ylabel, fontsize=18)
-            ax.axvline(0.0, linestyle='--', color='k')
-            ax.set_xlim(xlim)
-            ax.set_ylim([0, high_y])
+                if up:
+                    if up_probe[i]:
+                        pass
+                    else:
+                        continue
 
-            # Process to remove duplicate legend entries.
-            if legend:
-                handles, labels = plt.gca().get_legend_handles_labels()
-                newLabels, newHandles = [], []
-                for handle, label in zip(handles, labels):
-                  if label not in newLabels:
-                    newLabels.append(label)
-                    newHandles.append(handle)
-                ax.legend(newHandles, newLabels, framealpha=0.5)
+                ax.plot(x[i], y[i], '^', ms=10, color=tableau20[color], label=label.title())
+                ax.set_xlabel(xlabel, fontsize=18)
+                ax.set_ylabel(ylabel, fontsize=18)
+                ax.axvline(0.0, linestyle='--', color='k')
+                ax.set_xlim(xlim)
+                ax.set_ylim([0, high_y])
 
-    # Assign plot limits, if specified.
-    if xtype == 'rminrsep':
-        xlabel = 'R-Rsep (m)'
-        if xlim is None:
-            xlim = [-0.05, 0.1]
-    elif xtype == 'psin':
-        xlabel = 'Psin'
-        if xlim is None:
-            xlim = [0.98, 1.1]
-    elif xtype == 'time':
-        xlabel = 'Time (ms)'
+                # Process to remove duplicate legend entries.
+                if legend:
+                    handles, labels = plt.gca().get_legend_handles_labels()
+                    newLabels, newHandles = [], []
+                    for handle, label in zip(handles, labels):
+                      if label not in newLabels:
+                        newLabels.append(label)
+                        newHandles.append(handle)
+                    ax.legend(newHandles, newLabels, framealpha=0.5)
 
-    plot_ax(fig, x_filt, te_filt, 'Te (eV)', 131, 50, xlabel, xlim, legend=True, up=up)
-    plot_ax(fig, x_filt, ne_filt, 'ne (cm-3)', 132, 10e13, xlabel, xlim, up=up)
-    plot_ax(fig, x_filt, jsat_filt, 'jsat (A/cm2)', 133, 100, xlabel, xlim, up=up)
-    fig.tight_layout()
-    fig.show()
+        # Assign plot limits, if specified.
+        if xtype == 'rminrsep':
+            xlabel = 'R-Rsep (m)'
+            if xlim is None:
+                xlim = [-0.05, 0.1]
+        elif xtype == 'psin':
+            xlabel = 'Psin'
+            if xlim is None:
+                xlim = [0.98, 1.1]
+        elif xtype == 'time':
+            xlabel = 'Time (ms)'
+
+        plot_ax(fig, x_filt, te_filt, 'Te (eV)', 131, 50, xlabel, xlim, legend=True, up=up)
+        plot_ax(fig, x_filt, ne_filt, 'ne (cm-3)', 132, 10e13, xlabel, xlim, up=up)
+        plot_ax(fig, x_filt, jsat_filt, 'jsat (A/cm2)', 133, 100, xlabel, xlim, up=up)
+        fig.tight_layout()
+        fig.show()
 
     # Organize into dictionary for output.
     lp_dict = {xtype:x_filt, 'Te (eV)':te_filt, 'ne (cm-3)':ne_filt,
            'jsat (A/cm2)':jsat_filt, 'heatflux (W/cm2)':heatflux_filt,
-           'ground_filt':ground_filt, 'pnames':pnames_filt, 'R':r_filt, 'Z':z_filt}
+           'ground_filt':ground_filt, 'pnames':pnames_filt, 'R':r_filt,
+           'Z':z_filt, 'labels':labels_filt}
 
     # Output to a csv file.
     if csv_path != None:
