@@ -1,13 +1,13 @@
 """
 Author  : Shawn Zamperini
 Email   : zamp@utk.edu, zamperinis@fusion.gat.com
-Updated : 5/25/22
+Updated : 1/11/23
 
 This script started with some code written by Jake Nichols, but has moved on
-to be it's own standalone script. It provides a framework to plot OEDGE output
+to be its own standalone script. It provides a framework to plot OEDGE output
 data, mostly found in the netCDF file. The script oedge_plots_gui acts
 as an interface to this class full of functions, though there is nothing
-stopping someone from using this script on it's own.
+stopping someone from using this script on its own.
 
 List of functions:
 
@@ -83,23 +83,21 @@ collector_probe
 """
 
 import netCDF4
-import warnings
-import numpy             as np
-import matplotlib        as mpl
+import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-import pandas            as pd
-from collections         import OrderedDict
+import pandas as pd
 from matplotlib.backends.backend_pdf import PdfPages
-from shapely.geometry         import Point
+from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
 # Some issues can be fixed by enabling this backend, though I can't say what
 # exactly is going on since this is some low-level stuff.
-#mpl.use("TkAgg")
+# mpl.use("TkAgg")
 
 # A nice looking font.
-#plt.rcParams['font.family'] = 'serif'
-#plt.rcParams['font.family'] = 'DejaVu Sans'
+# plt.rcParams['font.family'] = 'serif'
+# plt.rcParams['font.family'] = 'DejaVu Sans'
 
 # These are the "Tableau 20" colors as RGB. Note: I have learned this is
 # unnecessary since matplotlib now includes this color palette.
@@ -116,6 +114,7 @@ for i in range(len(tableau20)):
 
 # A very small number.
 epsilon = 1e-30
+
 
 class OedgePlots:
 
@@ -135,27 +134,27 @@ class OedgePlots:
         self.dat_file = None
 
         # Load in some netCDF data that is used a lot.
-        self.rs     = self.nc['RS'][:]
-        self.zs     = self.nc['ZS'][:]
-        self.nrs    = self.nc['NRS'][:]
-        self.nks    = self.nc['NKS'][:]
-        self.area   = self.nc['KAREAS'][:]
-        self.korpg  = self.nc['KORPG'][:]
+        self.rs = self.nc['RS'][:]
+        self.zs = self.nc['ZS'][:]
+        self.nrs = self.nc['NRS'][:]
+        self.nks = self.nc['NKS'][:]
+        self.area = self.nc['KAREAS'][:]
+        self.korpg = self.nc['KORPG'][:]
         self.rvertp = self.nc['RVERTP'][:]
         self.zvertp = self.nc['ZVERTP'][:]
-        self.rvesm  = self.nc['RVESM'][:]
-        self.zvesm  = self.nc['ZVESM'][:]
-        self.irsep  = self.nc['IRSEP'][:]
-        self.qtim   = self.nc['QTIM'][:]
-        self.kss    = self.nc['KSS'][:]
-        self.kfizs  = self.nc['KFIZS'][:]
+        self.rvesm = self.nc['RVESM'][:]
+        self.zvesm = self.nc['ZVESM'][:]
+        self.irsep = self.nc['IRSEP'][:]
+        self.qtim = self.nc['QTIM'][:]
+        self.kss = self.nc['KSS'][:]
+        self.kfizs = self.nc['KFIZS'][:]
         self.ksmaxs = self.nc['KSMAXS'][:]
-        self.irsep  = self.nc['IRSEP'][:]
+        self.irsep = self.nc['IRSEP'][:]
         self.irwall = self.nc['IRWALL'][:]
-        self.crmb   = self.nc['CRMB'][:]
-        self.crmi   = self.nc['CRMI'][:]
-        self.emi    = 1.602E-19
-        self.cion   = self.nc['CION'][:]
+        self.crmb = self.nc['CRMB'][:]
+        self.crmi = self.nc['CRMI'][:]
+        self.emi = 1.602E-19
+        self.cion = self.nc['CION'][:]
 
         try:
             self.absfac = self.nc['ABSFAC'][:]
@@ -174,10 +173,10 @@ class OedgePlots:
             for ik in range(self.nks[ir]):
 
                 # Get the cell index of this knot on this ring.
-                index = self.korpg[ir,ik] - 1
+                index = self.korpg[ir, ik] - 1
 
                 # Only if the area of this cell is not zero append the corners.
-                if self.area[ir,ik] != 0.0:
+                if self.area[ir, ik] != 0.0:
                     vertices = list(zip(self.rvertp[index][0:4], self.zvertp[index][0:4]))
                     mesh.append(vertices)
                     num_cells = num_cells + 1
@@ -197,10 +196,10 @@ class OedgePlots:
         self.mesh = mesh
 
         # Add the .dat file with initialization as well.
-        #try:
+        # try:
         dat_path = netcdf_path.split(".nc")[0] + ".dat"
         self.add_dat_file(dat_path)
-        #except:
+        # except:
         #    print("Error: Can't locate .dat file.")
 
     def __repr__(self):
@@ -228,12 +227,12 @@ class OedgePlots:
 
         try:
             self.cpu_time = int(self.dat_file.split('TOTAL CPU TIME USED' + \
-                             '     (S)')[1].split('\n')[0])
+                                                    '     (S)')[1].split('\n')[0])
         except:
             pass
 
     def read_data_2d(self, dataname, charge=None, scaling=1.0, fix_fill=False,
-        no_core=False):
+                     no_core=False):
         """
         Reads in 2D data into a 1D array, in a form that is then passed easily
         to PolyCollection for plotting.
@@ -281,7 +280,7 @@ class OedgePlots:
                 # regardless, it sounds like we only want to include the second
                 # entry onwards. E.g.
                 # 0 - C0primary, 1 - C0total, 2 - C1+, ... 7 - C6+.
-                #raw_data = raw_data[:-1].sum(axis=0)
+                # raw_data = raw_data[:-1].sum(axis=0)
                 raw_data = raw_data[1:].sum(axis=0)
             else:
                 raw_data = raw_data[1:].sum(axis=0)
@@ -305,7 +304,7 @@ class OedgePlots:
                         if charge in [None, 'all']:
                             data[count] = raw_data[ir][ik] * scaling
                         else:
-                            #data[count] = raw_data[charge + 1][ir][ik] * scaling
+                            # data[count] = raw_data[charge + 1][ir][ik] * scaling
                             data[count] = raw_data[charge][ir][ik] * scaling
 
                         # If we don't want the core data in the plot, then let's
@@ -350,14 +349,14 @@ class OedgePlots:
 
             # Get the relevant table for the extra drifts out of the .dat file.
             add_data = self.dat_file.split('TABLE OF DRIFT REGION BY RING - RINGS ' + \
-                                            'WITHOUT FLOW ARE NOT LISTED\n')[1]. \
-                                            split('DRIFT')[0].split('\n')
+                                           'WITHOUT FLOW ARE NOT LISTED\n')[1]. \
+                split('DRIFT')[0].split('\n')
 
             # Split the data between the spaces, put into DataFrame.
             add_data = [line.split() for line in add_data]
             add_df = pd.DataFrame(add_data[1:-1], columns=['IR', 'Vdrift (m/s)',
-                                  'S_START (m)', 'S_END (m)'], dtype=float). \
-                                  set_index('IR')
+                                                           'S_START (m)', 'S_END (m)'], dtype=float). \
+                set_index('IR')
 
             # Get the 2D data from the netCDF file.
             dataname = 'KVHS'
@@ -380,15 +379,14 @@ class OedgePlots:
 
                             # Then add the drift along the appropriate s (or knot) range.
                             if self.kss[ir][ik] > add_df['S_START (m)'].loc[ir] and \
-                               self.kss[ir][ik] < add_df['S_END (m)'].loc[ir]:
-
-                               data[count] = data[count] + add_df['Vdrift (m/s)'].loc[ir]
+                                    self.kss[ir][ik] < add_df['S_END (m)'].loc[ir]:
+                                data[count] = data[count] + add_df['Vdrift (m/s)'].loc[ir]
 
                         # If we don't want the core data in the plot, then let's
                         # replace it with just None.
                         if no_core:
                             if ir < self.irsep - 1:
-                                #data[count] = None
+                                # data[count] = None
                                 data[count] = epsilon
 
                         count = count + 1
@@ -410,19 +408,19 @@ class OedgePlots:
         """
 
         # Get (R, Z) coordinates of separatrix.
-        rsep = self.rvertp[self.korpg[self.irsep-1,:self.nks[self.irsep-1]]][:,0]
-        zsep = self.zvertp[self.korpg[self.irsep-1,:self.nks[self.irsep-1]]][:,0]
+        rsep = self.rvertp[self.korpg[self.irsep - 1, :self.nks[self.irsep - 1]]][:, 0]
+        zsep = self.zvertp[self.korpg[self.irsep - 1, :self.nks[self.irsep - 1]]][:, 0]
         nsep = len(rsep)
-        lines=[]
+        lines = []
 
         # Construct separatrix as a series of pairs of coordinates (i.e. a line
         # between the coordinates), to be plotted. Don't connect final point to first.
-        for i in range(nsep-2):
-            lines.append([(rsep[i], zsep[i]), (rsep[i+1], zsep[i+1])])
+        for i in range(nsep - 2):
+            lines.append([(rsep[i], zsep[i]), (rsep[i + 1], zsep[i + 1])])
 
         return lines
 
-    def calculate_forces(self, force, vz_mult = 0.0, charge=None, no_core=False):
+    def calculate_forces(self, force, vz_mult=0.0, charge=None, no_core=False):
         """
         Return 2D representations of the parallel forces (FF, FiG, FeG, FPG, FE)
         in the same format as read_data_2d for easy plotting. This data is not
@@ -444,10 +442,10 @@ class OedgePlots:
         # Temperature and density values for calculations.
         te = self.read_data_2d('KTEBS', no_core=no_core)
         ti = self.read_data_2d('KTIBS', no_core=no_core)
-        ne = self.read_data_2d('KNBS',  no_core=no_core)
+        ne = self.read_data_2d('KNBS', no_core=no_core)
         col_log = 15
-        qe      = 1.602E-19
-        amu_kg  = 1.66E-27
+        qe = 1.602E-19
+        amu_kg = 1.66E-27
         fact = np.power(self.qtim, 2) * qe / (self.crmi * amu_kg)
 
         # See if T13 was on. Important for FF calculations.
@@ -472,7 +470,7 @@ class OedgePlots:
                 tau_s = 1.47E13 * self.crmi * ti * np.sqrt(ti / self.crmb) / \
                         ((1 + self.crmb / self.crmi) * ne * np.power(charge, 2) * col_log)
 
-                #print("FF:  {:.2f} s".format(tau_s))
+                # print("FF:  {:.2f} s".format(tau_s))
             except TypeError:
                 print("Error: Charge of ion needed for FF calculation.")
                 return None
@@ -502,7 +500,7 @@ class OedgePlots:
         if force.lower() in ['fpg', 'fnet']:
 
             # Parallel collisional diffusion time.
-            #tau_par = 1.47E13 * self.crmi * ti * np.sqrt(ti / self.crmb) / \
+            # tau_par = 1.47E13 * self.crmi * ti * np.sqrt(ti / self.crmb) / \
             #          (ne * np.power(charge, 2) * col_log)
 
             # Need to probably figure this out.
@@ -518,7 +516,7 @@ class OedgePlots:
 
             # The electron temperature gradient from the code. I don't understand
             # this scaling factor, but Jake uses it to get into presumably eV/m.
-            kfegs = self.read_data_2d('KFEGS', scaling = qe / fact, no_core=no_core)
+            kfegs = self.read_data_2d('KFEGS', scaling=qe / fact, no_core=no_core)
 
             # Calculate the force.
             feg = alpha * kfegs
@@ -530,13 +528,13 @@ class OedgePlots:
         # Ion temperature gradient force calculations.
         if force.lower() in ['fig', 'fnet']:
             mu = self.crmi / (self.crmi + self.crmb)
-            beta = 3 * (mu + 5 * np.sqrt(2) * np.power(charge, 2) * \
-                   (1.1 * np.power(mu, 5/2) - 0.35 * np.power(mu, 3/2)) - 1) / \
+            beta = 3 * (mu + 5 * np.sqrt(2) * np.power(charge, 2) *
+                        (1.1 * np.power(mu, 5 / 2) - 0.35 * np.power(mu, 3 / 2)) - 1) / \
                    (2.6 - 2 * mu + 5.4 * np.power(mu, 2))
             print("FiG: Beta = {:.2f}".format(beta))
 
             # Again, must scale the gradient with this scaling factor.
-            kfigs = self.read_data_2d('KFIGS', scaling = qe / fact, no_core=no_core)
+            kfigs = self.read_data_2d('KFIGS', scaling=qe / fact, no_core=no_core)
 
             # Calculate the force.
             fig = beta * kfigs
@@ -549,7 +547,7 @@ class OedgePlots:
         if force.lower() in ['fe', 'fnet']:
 
             # This also gets scaled by a factor as well in Jake's code.
-            e_pol = self.read_data_2d('E_POL', scaling = qe / fact, no_core=no_core)
+            e_pol = self.read_data_2d('E_POL', scaling=qe / fact, no_core=no_core)
             fe = charge * qe * e_pol
 
             # If not 'fnet', then go ahead and return.
@@ -561,8 +559,8 @@ class OedgePlots:
             return ff + fpg + feg + fig + fe
 
     def plot_contour_polygon(self, dataname, charge=None, scaling=1.0,
-                             normtype='linear', cmap='plasma', xlim=[0.9, 2.4],
-                             ylim = [-1.4, 1.4], plot_sep=True, levels=None,
+                             normtype='linear', cmap='plasma', xlim=(0.9, 2.4),
+                             ylim=(-1.4, 1.4), plot_sep=True, levels=None,
                              cbar_label=None, fontsize=16, lut=21,
                              smooth_cmap=False, vmin=None, vmax=None,
                              show_cp=None, ptip=None, show_mr=False,
@@ -648,20 +646,20 @@ class OedgePlots:
 
             # Divide the background velocity by the sounds speed to get the Mach number.
             elif dataname == 'KVHSimp - Mach':
-                te   = self.read_data_2d('KTEBS', no_core=no_core)
-                ti   = self.read_data_2d('KTIBS', no_core=no_core)
+                te = self.read_data_2d('KTEBS', no_core=no_core)
+                ti = self.read_data_2d('KTIBS', no_core=no_core)
                 kvhs = self.read_data_2d_kvhs_t13()
-                mi   = self.crmb * 931.494*10**6 / (3e8)**2  # amu --> eV s2 / m2
-                cs   = np.sqrt((te + ti) / mi)
+                mi = self.crmb * 931.494 * 10 ** 6 / (3e8) ** 2  # amu --> eV s2 / m2
+                cs = np.sqrt((te + ti) / mi)
                 data = kvhs / cs  # i.e. the Mach number.
 
             elif dataname == 'KVHS - Mach':
-                te   = self.read_data_2d('KTEBS', no_core=no_core)
-                ti   = self.read_data_2d('KTIBS', no_core=no_core)
-                kvhs = self.read_data_2d('KVHS',  no_core=no_core, charge=charge,
+                te = self.read_data_2d('KTEBS', no_core=no_core)
+                ti = self.read_data_2d('KTIBS', no_core=no_core)
+                kvhs = self.read_data_2d('KVHS', no_core=no_core, charge=charge,
                                          scaling=scaling, fix_fill=fix_fill)
-                mi   = self.crmb * 931.494*10**6 / (3e8)**2  # amu --> eV s2 / m2
-                cs   = np.sqrt((te + ti) / mi)
+                mi = self.crmb * 931.494 * 10 ** 6 / (3e8) ** 2  # amu --> eV s2 / m2
+                cs = np.sqrt((te + ti) / mi)
                 print("CRMB = {} amu".format(self.crmb))
                 data = kvhs / cs  # i.e. the Mach number.
 
@@ -687,7 +685,7 @@ class OedgePlots:
 
         # Create a good sized figure with correct proportions.
         fig = plt.figure(figsize=figsize)
-        ax  = fig.add_subplot(111)
+        ax = fig.add_subplot(111)
 
         if normtype == 'linear':
             if vmin == None:
@@ -702,7 +700,7 @@ class OedgePlots:
             # this isn't correct, but as far as the colormap is concerned
             # it doesn't matter.
             data[data == 0.0] = data[data != 0.0].min()
-            #data = np.ma.masked_where(data==0.0, data)
+            # data = np.ma.masked_where(data==0.0, data)
             if vmin == None:
                 vmin = data.min()
             if vmax == None:
@@ -733,8 +731,8 @@ class OedgePlots:
         if cmap == 'nipy_spectral':
             cmap_obj = plt.get_cmap(cmap)
             new_cmap = mpl.colors.LinearSegmentedColormap.from_list(
-              'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap_obj.name, a=0, b=0.95),
-              cmap_obj(np.linspace(0, 0.95, 500)), N=lut)
+                'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap_obj.name, a=0, b=0.95),
+                cmap_obj(np.linspace(0, 0.95, 500)), N=lut)
             cmap = new_cmap
 
         # Choose whether to discretize the colormap or not first.
@@ -745,9 +743,9 @@ class OedgePlots:
 
         # Create PolyCollection object.
         if show_grid:
-            edgecolors="none"
+            edgecolors = "none"
         else:
-            edgecolors="face"
+            edgecolors = "face"
         coll = mpl.collections.PolyCollection(mesh, array=data,
                                               cmap=scalar_map.cmap,
                                               norm=scalar_map.norm,
@@ -764,7 +762,7 @@ class OedgePlots:
             keep_idx = np.where(np.logical_and(self.rvesm[0] != 0, self.zvesm[0] != 0))
             rvesm = np.append(self.rvesm[0][keep_idx], self.rvesm[0][keep_idx][0])
             zvesm = np.append(self.zvesm[0][keep_idx], self.zvesm[0][keep_idx][0])
-            #ax.plot(self.rvesm[0][keep_idx], self.zvesm[0][keep_idx], color='k', linewidth=1)
+            # ax.plot(self.rvesm[0][keep_idx], self.zvesm[0][keep_idx], color='k', linewidth=1)
         else:
             rvesm = wall_data[0]
             zvesm = wall_data[1]
@@ -797,14 +795,14 @@ class OedgePlots:
                 print("Error: Location of tip of probe not given.")
 
         # MiMES probe.
-        cp_width  = 0.03
+        cp_width = 0.03
         facecolor = 'grey'
         edgecolor = 'black'
         if 1 in show_cp:
             ptip_tmp = ptip[show_cp.index(1)]
-            lower_xy = (ptip_tmp, -0.185 - cp_width/2.0)
-            width    = 2.38 - ptip_tmp
-            height   = cp_width
+            lower_xy = (ptip_tmp, -0.185 - cp_width / 2.0)
+            width = 2.38 - ptip_tmp
+            height = cp_width
             rect = mpl.patches.Rectangle(lower_xy, width=width, height=height,
                                          facecolor=facecolor, edgecolor=edgecolor)
             ax.add_patch(rect)
@@ -812,9 +810,9 @@ class OedgePlots:
         # Top crown probe. Point is to simulate a DiMES probe if it were USN.
         if 2 in show_cp:
             ptip_tmp = ptip[show_cp.index(2)]
-            lower_xy = (1.485 - cp_width/2.0, ptip_tmp)
-            width    = cp_width
-            height   = ptip_tmp - 1.172
+            lower_xy = (1.485 - cp_width / 2.0, ptip_tmp)
+            width = cp_width
+            height = ptip_tmp - 1.172
             rect = mpl.patches.Rectangle(lower_xy, width=width, height=-height,
                                          facecolor=facecolor, edgecolor=edgecolor)
             ax.add_patch(rect)
@@ -822,9 +820,9 @@ class OedgePlots:
         # DiMES probe.
         if 3 in show_cp:
             ptip_tmp = ptip[show_cp.index(3)]
-            lower_xy = (1.485 - cp_width/2.0, -1.25)
-            width    = cp_width
-            height   = ptip_tmp - (-1.25)
+            lower_xy = (1.485 - cp_width / 2.0, -1.25)
+            width = cp_width
+            height = ptip_tmp - (-1.25)
             rect = mpl.patches.Rectangle(lower_xy, width=width, height=height,
                                          facecolor=facecolor, edgecolor=edgecolor)
             ax.add_patch(rect)
@@ -832,17 +830,17 @@ class OedgePlots:
         # Option to show metal rings. Floor (1.32-1.37) Shelf (1.404, 1.454).
         if show_mr:
             tile_height = 0.01
-            facecolor   = 'red'
-            edgecolor   = 'black'
-            floor_xy    = (1.32, -1.363 - tile_height)
+            facecolor = 'red'
+            edgecolor = 'black'
+            floor_xy = (1.32, -1.363 - tile_height)
             floor_width = 1.37 - 1.32
-            shelf_xy    = (1.404, -1.250 - tile_height)
+            shelf_xy = (1.404, -1.250 - tile_height)
             shelf_width = 1.454 - 1.404
-            floor_rect  = mpl.patches.Rectangle(floor_xy, width = floor_width,
+            floor_rect = mpl.patches.Rectangle(floor_xy, width=floor_width,
                                                height=tile_height,
                                                facecolor=facecolor,
                                                edgecolor=edgecolor)
-            shelf_rect  = mpl.patches.Rectangle(shelf_xy, width = shelf_width,
+            shelf_rect = mpl.patches.Rectangle(shelf_xy, width=shelf_width,
                                                height=tile_height,
                                                facecolor=facecolor,
                                                edgecolor=edgecolor)
@@ -867,9 +865,9 @@ class OedgePlots:
         pass
 
     def create_ts_from_omfit(self, shot, t_window, omfit_path=None,
-        output_path=None, filt_abv_avg=None, smooth=False, smooth_window=11,
-        filter=False, plot_it=True, core_shift=0.0, div_shift=0.0,
-        div_sas_shift=0.0):
+                             output_path=None, filt_abv_avg=None, smooth=False, smooth_window=11,
+                             filter=False, plot_it=True, core_shift=0.0, div_shift=0.0,
+                             div_sas_shift=0.0):
         """
         This creates a similar file as create_ts, the file that is used to create
         PDF's of plots comparing the OEDGE solution to the TS data, except instead
@@ -955,8 +953,8 @@ class OedgePlots:
         omfit_df.update(div_sas_shift)
 
         # Remove data outside of the time window.
-        keep = np.logical_and(omfit_df["time"].astype(float)>=t_window[0],
-          omfit_df["time"].astype(float)<=t_window[1])
+        keep = np.logical_and(omfit_df["time"].astype(float) >= t_window[0],
+                              omfit_df["time"].astype(float) <= t_window[1])
         omfit_df = omfit_df[keep]
 
         # Save raw data for plotting comparison later.
@@ -975,7 +973,7 @@ class OedgePlots:
             # For each system...
             for system in ["core_r+1", "divertor_r-1", "divertor_r+1"]:
                 try:
-                    sys_df = omfit_df[omfit_df["subsystem"]==system]
+                    sys_df = omfit_df[omfit_df["subsystem"] == system]
                 except:
                     print("No data for {}".format(system))
                     continue
@@ -985,7 +983,7 @@ class OedgePlots:
 
                     # Get the data points from the chord, replace with a median
                     # filtered signal.
-                    chan_df = sys_df[sys_df["channel"]==chan]
+                    chan_df = sys_df[sys_df["channel"] == chan]
                     if smooth_window > len(chan_df["te"]):
                         smaller_window = int(len(chan_df["te"]) / 1.5)
                         if smaller_window % 2 == 0:
@@ -994,7 +992,8 @@ class OedgePlots:
                                 smaller_window = 1
                         smooth_te = medfilt(chan_df["te"], smaller_window)
                         smooth_ne = medfilt(chan_df["ne"], smaller_window)
-                        print("  {}: channel {:d}: Decreasing window size to {:d}".format(system, int(chan), smaller_window))
+                        print("  {}: channel {:d}: Decreasing window size to {:d}".format(system, int(chan),
+                                                                                          smaller_window))
                         window_warning = True
                     else:
                         smooth_te = medfilt(chan_df["te"], smooth_window)
@@ -1018,7 +1017,7 @@ class OedgePlots:
             # For each system...
             for system in ["core_r+1", "divertor_r-1", "divertor_r+1"]:
                 try:
-                    sys_df = omfit_df[omfit_df["subsystem"]==system]
+                    sys_df = omfit_df[omfit_df["subsystem"] == system]
                 except:
                     print("No data for {}".format(system))
                     continue
@@ -1027,7 +1026,7 @@ class OedgePlots:
                 for chan in sys_df["channel"].unique():
 
                     # Get the data points from the chord.
-                    chan_df = sys_df[sys_df["channel"]==chan]
+                    chan_df = sys_df[sys_df["channel"] == chan]
                     points_dropped_te = 0
                     while True:
 
@@ -1054,18 +1053,17 @@ class OedgePlots:
                         chan_df["ne"].drop(drop_ne, axis=0, inplace=True)
                         points_dropped_ne += len(drop_ne)
 
-                    #omfit_df.update(chan_df)
+                    # omfit_df.update(chan_df)
                     print("  {} {:d}: ".format(system, int(chan)) + \
-                      "Dropped {:} ne ".format(points_dropped_ne) + \
-                      "and {:} Te points ".format(points_dropped_te) + \
-                      "({:} total)".format(points_dropped_te + points_dropped_ne))
+                          "Dropped {:} ne ".format(points_dropped_ne) + \
+                          "and {:} Te points ".format(points_dropped_te) + \
+                          "({:} total)".format(points_dropped_te + points_dropped_ne))
 
                     new_omfit_df = pd.concat([new_omfit_df, chan_df])
 
             # Reassemble omfit_df of the filtered channels.
             omfit_df = new_omfit_df
             print("  After len(omfit_df) = {:}".format(len(omfit_df)))
-
 
         # Smooth with just a simple third order savgol filter.
         if smooth:
@@ -1076,7 +1074,7 @@ class OedgePlots:
             # For each system...
             for system in ["core_r+1", "divertor_r-1", "divertor_r+1"]:
                 try:
-                    sys_df = omfit_df[omfit_df["subsystem"]==system]
+                    sys_df = omfit_df[omfit_df["subsystem"] == system]
                 except:
                     print("No data for {}".format(system))
                     continue
@@ -1086,10 +1084,12 @@ class OedgePlots:
 
                     # Get the data points from the chord, replace with a savgol
                     # filtered signal.
-                    chan_df = sys_df[sys_df["channel"]==chan]
+                    chan_df = sys_df[sys_df["channel"] == chan]
                     try:
-                        smooth_te = savgol_filter(chan_df["te"], smooth_window, 2, mode="constant", cval=chan_df["te"].median())
-                        smooth_ne = savgol_filter(chan_df["ne"], smooth_window, 2, mode="constant", cval=chan_df["ne"].median())
+                        smooth_te = savgol_filter(chan_df["te"], smooth_window, 2, mode="constant",
+                                                  cval=chan_df["te"].median())
+                        smooth_ne = savgol_filter(chan_df["ne"], smooth_window, 2, mode="constant",
+                                                  cval=chan_df["ne"].median())
                     except Exception as e:
 
                         # Use smaller window size the size of the whole channel.
@@ -1100,9 +1100,12 @@ class OedgePlots:
                         if smaller_window < 2:
                             print("  {}: channel {:d}: Only 1 data point! Skip smoothing.".format(system, int(chan)))
                             continue
-                        print("  {}: channel {:d}: Decreasing window size to {:d}".format(system, int(chan), smaller_window))
-                        smooth_te = savgol_filter(chan_df["te"], smaller_window, 2, mode="constant", cval=chan_df["te"].median())
-                        smooth_ne = savgol_filter(chan_df["ne"], smaller_window, 2, mode="constant", cval=chan_df["ne"].median())
+                        print("  {}: channel {:d}: Decreasing window size to {:d}".format(system, int(chan),
+                                                                                          smaller_window))
+                        smooth_te = savgol_filter(chan_df["te"], smaller_window, 2, mode="constant",
+                                                  cval=chan_df["te"].median())
+                        smooth_ne = savgol_filter(chan_df["ne"], smaller_window, 2, mode="constant",
+                                                  cval=chan_df["ne"].median())
                         window_warning = True
                     chan_df["te"] = smooth_te
                     chan_df["ne"] = smooth_ne
@@ -1110,7 +1113,10 @@ class OedgePlots:
 
         # First, let's find the rings, knots and S values for each measurement location.
         print("Comparing to grid...")
-        rings = []; knots = []; s = []; systems = []; channels = []
+        rings = []
+        knots = []
+        s = []
+        systems = []
         for row in range(0, len(omfit_df)):
 
             # Coordinates for this TS measurement.
@@ -1124,7 +1130,7 @@ class OedgePlots:
             # enables spreading the wealth some.
             ring = self.find_ring_from_psin(ts_psin)
             knot = self.find_knot_on_ring(ring, ts_r, ts_z)
-            #ring, knot = self.find_ring_knot(ts_r, ts_z)
+            # ring, knot = self.find_ring_knot(ts_r, ts_z)
 
             # Get the S coordinate.
             s_tmp = self.kss[ring][knot]
@@ -1150,68 +1156,68 @@ class OedgePlots:
         # Print warning for if window size changed.
         if window_warning:
             message = "Warning! Window size was changed for at least one " + \
-            "chord. This probably means it missed out on at least one of " + \
-            "the filtering methods and won't look as good. Options are " + \
-            "to either just remove this chord completely from your output " + \
-            "file, or better yet to pass in multiple omfit_path's to " + \
-            "combine the data from repeat shots so the window shortening " + \
-            "procedure won't kick in (because you'll have more data)."
+                      "chord. This probably means it missed out on at least one of " + \
+                      "the filtering methods and won't look as good. Options are " + \
+                      "to either just remove this chord completely from your output " + \
+                      "file, or better yet to pass in multiple omfit_path's to " + \
+                      "combine the data from repeat shots so the window shortening " + \
+                      "procedure won't kick in (because you'll have more data)."
             print(message)
 
         # Organize into the output dataframe with the expected format.
-        te   = omfit_df['te'].values
-        ne   = omfit_df['ne'].values
+        te = omfit_df['te'].values
+        ne = omfit_df['ne'].values
         psin = omfit_df['psin'].values
-        r    = omfit_df['r'].values
-        z    = omfit_df['z'].values
+        r = omfit_df['r'].values
+        z = omfit_df['z'].values
         time = omfit_df['time'].values
         channels = omfit_df['channel'].values
-        #shot = np.full(len(time), shot)
+        # shot = np.full(len(time), shot)
         shot = omfit_df["shot"].values
         data = np.vstack((s, te, ne, rings, knots, systems, psin, channels, shot, r, z, time))
 
         self.output_df = pd.DataFrame(data.T, columns=('S (m)', 'Te (eV)', 'ne (m-3)',
-                                 'Ring', 'Cell', 'System', 'Psin', 'Channel', 'Shot', 'R (m)',
-                                 'Z (m)', 'Time'))
+                                                       'Ring', 'Cell', 'System', 'Psin', 'Channel', 'Shot', 'R (m)',
+                                                       'Z (m)', 'Time'))
 
         # Make sure the data types of each column are correct.
-        self.output_df['S (m)']    = self.output_df['S (m)'].astype(np.float)
-        self.output_df['Te (eV)']  = self.output_df['Te (eV)'].astype(np.float)
+        self.output_df['S (m)'] = self.output_df['S (m)'].astype(np.float)
+        self.output_df['Te (eV)'] = self.output_df['Te (eV)'].astype(np.float)
         self.output_df['ne (m-3)'] = self.output_df['ne (m-3)'].astype(np.float)
-        self.output_df['Ring']     = self.output_df['Ring'].astype(np.int)
-        self.output_df['Cell']     = self.output_df['Cell'].astype(np.int)
-        self.output_df['System']   = self.output_df['System'].astype(np.str)
-        self.output_df['Psin']     = self.output_df['Psin'].astype(np.float)
-        self.output_df['Channel']  = self.output_df['Channel'].astype(np.float).astype(np.int)
-        self.output_df['Shot']     = self.output_df['Shot'].astype(np.float).astype(np.int)
-        self.output_df['R (m)']    = self.output_df['R (m)'].astype(np.float)
-        self.output_df['Z (m)']    = self.output_df['Z (m)'].astype(np.float)
-        self.output_df['Time']     = self.output_df['Time'].astype(np.float)
+        self.output_df['Ring'] = self.output_df['Ring'].astype(np.int)
+        self.output_df['Cell'] = self.output_df['Cell'].astype(np.int)
+        self.output_df['System'] = self.output_df['System'].astype(np.str)
+        self.output_df['Psin'] = self.output_df['Psin'].astype(np.float)
+        self.output_df['Channel'] = self.output_df['Channel'].astype(np.float).astype(np.int)
+        self.output_df['Shot'] = self.output_df['Shot'].astype(np.float).astype(np.int)
+        self.output_df['R (m)'] = self.output_df['R (m)'].astype(np.float)
+        self.output_df['Z (m)'] = self.output_df['Z (m)'].astype(np.float)
+        self.output_df['Time'] = self.output_df['Time'].astype(np.float)
 
         # Plot the resulting data to see how things turned out.
         if plot_it:
-            fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(10,6), sharex=True)
-            core    = self.output_df[self.output_df["System"]=="core"]
-            core_x  = core["Psin"]
+            fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(10, 6), sharex=True)
+            core = self.output_df[self.output_df["System"] == "core"]
+            core_x = core["Psin"]
             core_te = core["Te (eV)"]
             core_ne = core["ne (m-3)"]
-            divertor    = self.output_df[self.output_df["System"]=="divertor"]
-            divertor_x  = divertor["Psin"]
+            divertor = self.output_df[self.output_df["System"] == "divertor"]
+            divertor_x = divertor["Psin"]
             divertor_te = divertor["Te (eV)"]
             divertor_ne = divertor["ne (m-3)"]
-            divertor_sas    = self.output_df[self.output_df["System"]=="divertor_sas"]
-            divertor_sas_x  = divertor_sas["Psin"]
+            divertor_sas = self.output_df[self.output_df["System"] == "divertor_sas"]
+            divertor_sas_x = divertor_sas["Psin"]
             divertor_sas_te = divertor_sas["Te (eV)"]
             divertor_sas_ne = divertor_sas["ne (m-3)"]
-            core_raw = raw_omfit_df[raw_omfit_df["subsystem"]=="core_r+1"]
+            core_raw = raw_omfit_df[raw_omfit_df["subsystem"] == "core_r+1"]
             core_x_raw = core_raw["psin"]
             core_te_raw = core_raw["te"]
             core_ne_raw = core_raw["ne"]
-            divertor_raw = raw_omfit_df[raw_omfit_df["subsystem"]=="divertor_r-1"]
+            divertor_raw = raw_omfit_df[raw_omfit_df["subsystem"] == "divertor_r-1"]
             divertor_x_raw = divertor_raw["psin"]
             divertor_te_raw = divertor_raw["te"]
             divertor_ne_raw = divertor_raw["ne"]
-            divertor_sas_raw = raw_omfit_df[raw_omfit_df["subsystem"]=="divertor_r+1"]
+            divertor_sas_raw = raw_omfit_df[raw_omfit_df["subsystem"] == "divertor_r+1"]
             divertor_sas_x_raw = divertor_sas_raw["psin"]
             divertor_sas_te_raw = divertor_sas_raw["te"]
             divertor_sas_ne_raw = divertor_sas_raw["ne"]
@@ -1272,17 +1278,18 @@ class OedgePlots:
         """
 
         rcp_cols = ["R (m)", "Z (m)", "ne (m-3)", "Te (eV)", "Mach",
-          "vi (m/s)", "qpar (W/m2)"]
+                    "vi (m/s)", "qpar (W/m2)"]
 
         print("Loading files...")
-        ts_df  = pd.read_excel(ts_path)
+        ts_df = pd.read_excel(ts_path)
         rcp_df = pd.read_excel(rcp_path, sheet_name=rcp_sheet, usecols=rcp_cols)
 
         # Find which ring, knot each measurement location is on on the grid.
         print("Comparing to grid...")
-        rings = []; knots = []; s = []; systems = []
+        rings = []
+        knots = []
+        s = []
         for row in range(0, len(rcp_df)):
-
             # Using the R, Z locations, find the ring, knot for each location.
             rcp_r = rcp_df.iloc[row]['R (m)']
             rcp_z = rcp_df.iloc[row]['Z (m)']
@@ -1322,12 +1329,10 @@ class OedgePlots:
         for p, t, n in zip(psin, te, ne):
             print("{:5.3f} {:7.2f} {:7.2f} {:8.2e} 0".format(p, t, t, n))
 
-
-
     def compare_ts(self, ts_filename, rings, show_legend='all', nrows=3,
-        ncols=2, bin_width=1.0, output_file='my_ts_comparison.pdf',
-        rad_bin_width=0.0025, core_sweep_bug_time=None, filter_zeros=True,
-        dashed_rings=True):
+                   ncols=2, bin_width=1.0, output_file='my_ts_comparison.pdf',
+                   rad_bin_width=0.0025, core_sweep_bug_time=None, filter_zeros=True,
+                   dashed_rings=True):
         """
         Function to create plots to compare the OEDGE results to Thomson
         scattering. A PDF file is output with all the graphs for each ring. This
@@ -1374,7 +1379,7 @@ class OedgePlots:
 
         # Get rid of some random zeros that muck things up.
         if filter_zeros:
-            df = df[df['Te (eV)']  > 0.0]
+            df = df[df['Te (eV)'] > 0.0]
             df = df[df['ne (m-3)'] > 0.0]
 
         # Determine if USN/LSN by looking at the Z coordinate of the X-point.
@@ -1399,24 +1404,25 @@ class OedgePlots:
             # Get Rsep at the OMP.
             sep_ring = self.nc['IRSEP'][:] - 1  # Subtract 1 for indexing means.
             omp_side = self.rs[sep_ring] > r0
-            zs_omp   = self.zs[sep_ring][omp_side]
-            rs_omp   = self.rs[sep_ring][omp_side]
-            dist     = np.abs(zs_omp - z0)
-            #dist         = np.abs(self.zs[sep_ring] - z0)
+            zs_omp = self.zs[sep_ring][omp_side]
+            rs_omp = self.rs[sep_ring][omp_side]
+            dist = np.abs(zs_omp - z0)
+            # dist         = np.abs(self.zs[sep_ring] - z0)
             rsepomp_cell = np.where(dist == dist.min())[0]
-            rsepomp      = rs_omp[rsepomp_cell]
-            zsepomp      = zs_omp[rsepomp_cell]
-            #rsepomp      = self.rs[sep_ring, rsepomp_cell]
+            rsepomp = rs_omp[rsepomp_cell]
+            zsepomp = zs_omp[rsepomp_cell]
+            # rsepomp      = self.rs[sep_ring, rsepomp_cell]
 
             # Get the Thomson R's and Z's. Only upstream and rings outside IRSEP.
             # Downstream comparisons will have to be with Langmuir probes and
             # the parallel to s graphs that utilize the divertor TS.
-            tmp_df  = df[np.logical_and(df['Ring'] >= self.irsep, df['Ring'] < 100)] # Just to stop far rings from goofing up the plot.
-            ts_r    = tmp_df[tmp_df['System'] == 'core']['R (m)'].values
-            ts_z    = tmp_df[tmp_df['System'] == 'core']['Z (m)'].values
+            tmp_df = df[np.logical_and(df['Ring'] >= self.irsep,
+                                       df['Ring'] < 100)]  # Just to stop far rings from goofing up the plot.
+            ts_r = tmp_df[tmp_df['System'] == 'core']['R (m)'].values
+            ts_z = tmp_df[tmp_df['System'] == 'core']['Z (m)'].values
             ts_ring = tmp_df[tmp_df['System'] == 'core']['Ring'].values  # Subtract 1 for indexing means.
-            ts_te   = tmp_df[tmp_df['System'] == 'core']['Te (eV)'].values
-            ts_ne   = tmp_df[tmp_df['System'] == 'core']['ne (m-3)'].values
+            ts_te = tmp_df[tmp_df['System'] == 'core']['Te (eV)'].values
+            ts_ne = tmp_df[tmp_df['System'] == 'core']['ne (m-3)'].values
             ts_cell = tmp_df[tmp_df['System'] == 'core']['Cell'].values
             ts_romp = np.zeros(len(ts_r))
 
@@ -1611,7 +1617,7 @@ class OedgePlots:
 
                     # Use modulo to determine if this ring starts a new fig/pdf page.
                     if graph_count % ngraphs == 0:
-                        fig, axs = plt.subplots(nrows, ncols, sharex=False, figsize=(10,8))
+                        fig, axs = plt.subplots(nrows, ncols, sharex=False, figsize=(10, 8))
                         axs = axs.flatten()
 
                     # Find what color this shot is from the above shots_enum. Elaborate...
@@ -1622,23 +1628,23 @@ class OedgePlots:
                         # Get only the portion matching this shot.
                         smaller_ring_df = ring_df[ring_df['Shot'] == shot]
                         s_core = smaller_ring_df[smaller_ring_df['System'] == 'core']['S (m)']
-                        s_div  = smaller_ring_df[smaller_ring_df['System'] == 'divertor']['S (m)']
+                        s_div = smaller_ring_df[smaller_ring_df['System'] == 'divertor']['S (m)']
 
                         # Choose correct data for Y axis.
                         if oedge_data == 'Te':
                             y = smaller_ring_df['Te (eV)']
                             y_core = smaller_ring_df[smaller_ring_df['System'] == 'core']['Te (eV)']
-                            y_div  = smaller_ring_df[smaller_ring_df['System'] == 'divertor']['Te (eV)']
+                            y_div = smaller_ring_df[smaller_ring_df['System'] == 'divertor']['Te (eV)']
                         if oedge_data == 'ne':
                             y = smaller_ring_df['ne (m-3)']
                             y_core = smaller_ring_df[smaller_ring_df['System'] == 'core']['ne (m-3)']
-                            y_div  = smaller_ring_df[smaller_ring_df['System'] == 'divertor']['ne (m-3)']
+                            y_div = smaller_ring_df[smaller_ring_df['System'] == 'divertor']['ne (m-3)']
 
                         # Plot it with a specific color. 2 because those colors are better.
                         # zorder is needed because of a matplotlib bug where the
                         # errorbars render under these data points, which we don't
                         # want.
-                        #ls = axs[graph_count].plot(smaller_ring_df['S (m)'], y, '.',
+                        # ls = axs[graph_count].plot(smaller_ring_df['S (m)'], y, '.',
                         #                           color=tableau20[color], label=shot,
                         #                           alpha=1.0, zorder=-32)
                         ls = axs[graph_count].plot(s_core, y_core, '.',
@@ -1646,7 +1652,8 @@ class OedgePlots:
                                                    alpha=0.5, zorder=-32)
                         ls = axs[graph_count].plot(s_div, y_div, 'o',
                                                    color=tableau20[color], label=shot,
-                                                   alpha=0.5, zorder=-32, markerfacecolor='none', markeredgecolor=tableau20[color])
+                                                   alpha=0.5, zorder=-32, markerfacecolor='none',
+                                                   markeredgecolor=tableau20[color])
                         color += 1
 
                         # Prevent going past the size of tableau20 array.
@@ -1664,23 +1671,23 @@ class OedgePlots:
                     if len(ring_df.index) == 0:
                         continue
                     s = ring_df['S (m)']
-                    #print('Ring: ' + str(ring))
-                    #print('smin: ' + str(s.min()))
-                    #print('smax: ' + str(s.max()))
+                    # print('Ring: ' + str(ring))
+                    # print('smin: ' + str(s.min()))
+                    # print('smax: ' + str(s.max()))
 
                     # If there is essentially just one bin.
                     if np.abs(s.min() - s.max()) < bin_width:
-                        bin_means   = y.mean()
-                        bin_stds    = y.std()
+                        bin_means = y.mean()
+                        bin_stds = y.std()
                         bin_centers = s.mean()
 
                     # Else do the binning procedure.
                     else:
-                        bins = np.arange(s.min(), s.max()+bin_width, bin_width)
+                        bins = np.arange(s.min(), s.max() + bin_width, bin_width)
                         digi = np.digitize(s, bins)
                         bin_means = [y[digi == i].mean() for i in range(1, len(bins))]
                         bin_stds = [y[digi == i].std() for i in range(1, len(bins))]
-                        #bin_centers = bins[:-1] + bin_width / 2.0
+                        # bin_centers = bins[:-1] + bin_width / 2.0
                         bin_centers = [s[digi == i].mean() for i in range(1, len(bins))]
 
                     line1 = axs[graph_count].errorbar(bin_centers, bin_means,
@@ -1688,29 +1695,29 @@ class OedgePlots:
                                                       capthick=1.5, capsize=3)
 
                     # Find the rings from the OEDGE simulation now. Ring-1 for indexing.
-                    oedge_s  = self.nc['KSS'][:][ring-1].data
+                    oedge_s = self.nc['KSS'][:][ring - 1].data
 
                     # Te plots.
                     if oedge_data == 'Te':
-                        oedge_dat = self.nc['KTEBS'][:][ring-1].data
+                        oedge_dat = self.nc['KTEBS'][:][ring - 1].data
                         axs[graph_count].set_ylabel('Te (eV)')
-                        #axs[graph_count].set_ylim([0, 200])
+                        # axs[graph_count].set_ylim([0, 200])
 
                     # ne plots.
                     if oedge_data == 'ne':
-                        oedge_dat = self.nc['KNBS'][:][ring-1].data
+                        oedge_dat = self.nc['KNBS'][:][ring - 1].data
                         axs[graph_count].set_ylabel('ne (m-3)')
-                        #axs[graph_count].set_ylim([0, 1.5e20])
+                        # axs[graph_count].set_ylim([0, 1.5e20])
 
                     # Drop some extra zeros that sneak in.
                     keep_idx = np.where(oedge_s != 0.0)[0]
-                    oedge_s  = oedge_s[keep_idx]
+                    oedge_s = oedge_s[keep_idx]
                     oedge_dat = oedge_dat[keep_idx]
 
                     # Restrict to the outer half since that's where TS data is.
-                    #half_idx = np.where(oedge_s > oedge_s.max()/2.0)[0][0]
-                    #oedge_s  = oedge_s[half_idx:]
-                    #oedge_dat = oedge_dat[half_idx:]
+                    # half_idx = np.where(oedge_s > oedge_s.max()/2.0)[0][0]
+                    # oedge_s  = oedge_s[half_idx:]
+                    # oedge_dat = oedge_dat[half_idx:]
 
                     # Adjust limits.
                     try:
@@ -1718,7 +1725,7 @@ class OedgePlots:
                     except:
                         max_bin = 0
                     max_val = max([max_bin, max(oedge_dat)]) * 1.5
-                    #print("{}, {}: {}, {} ({})".format(oedge_data, ring, max_bin, max(oedge_dat), max_val))
+                    # print("{}, {}: {}, {} ({})".format(oedge_data, ring, max_bin, max(oedge_dat), max_val))
                     axs[graph_count].set_ylim([0, max_val])
 
                     # Add OEDGE data to plot. Note comma after 'line2', because plot
@@ -1727,7 +1734,7 @@ class OedgePlots:
 
                     # Extra plot commands.
                     try:
-                        psin = self.nc.variables['PSIFL'][:][ring-1]
+                        psin = self.nc.variables['PSIFL'][:][ring - 1]
                         psin = psin[psin != 0].mean()
                         ring_label = r'Ring {} ($\phi_n$ = {:.3f})'.format(ring, psin)
                     except:
@@ -1736,7 +1743,8 @@ class OedgePlots:
                                           transform=axs[graph_count].transAxes)
                     axs[graph_count].set_xlabel('S (m)')
                     if show_legend == 'all':
-                        axs[graph_count].legend(loc='upper center', ncol=3, bbox_to_anchor=(0.5, 1.2), fancybox=True, shadow=True)
+                        axs[graph_count].legend(loc='upper center', ncol=3, bbox_to_anchor=(0.5, 1.2), fancybox=True,
+                                                shadow=True)
                     if show_legend == 'short':
                         axs[graph_count].legend((line1, line2), ('Thomson', 'OEDGE'),
                                                 loc='upper center', ncol=3,
@@ -1744,12 +1752,12 @@ class OedgePlots:
                                                 fancybox=True, shadow=True)
 
                     # Reset graph_count once it's time for a new page.
-                    if graph_count == ngraphs-1:
+                    if graph_count == ngraphs - 1:
                         graph_count = 0
                         fig.tight_layout()
-                        #fig.legend(ls, shots)
+                        # fig.legend(ls, shots)
                         # papertype depreciated.
-                        #pdf.savefig(fig, papertype='letter')
+                        # pdf.savefig(fig, papertype='letter')
                         pdf.savefig(fig)
                         plt.close()
                     else:
@@ -1759,7 +1767,7 @@ class OedgePlots:
                 if graph_count != 0:
                     fig.tight_layout()
                     # papertype depreciated.
-                    #pdf.savefig(fig, papertype='letter')
+                    # pdf.savefig(fig, papertype='letter')
                     pdf.savefig(fig)
                     plt.close()
 
@@ -1810,7 +1818,7 @@ class OedgePlots:
         closest_knot : The knot on this ring closest to r, z.
         """
 
-        dist = np.sqrt((r - self.rs[ring])**2 + (z - self.zs[ring])**2)
+        dist = np.sqrt((r - self.rs[ring]) ** 2 + (z - self.zs[ring]) ** 2)
         closest_knot = np.where(dist == dist.min())
         return closest_knot[0][0]
 
@@ -1886,8 +1894,8 @@ class OedgePlots:
         # I think I ditched this method because if you were outside the grid it
         # still returned something, which made it confusing. The above is able
         # to tell if the point is in the grid or not.
-        #dist = np.sqrt(np.square(r - self.rs) + np.square(z - self.zs))
-        #closest_cell = np.where(dist == dist.min())
+        # dist = np.sqrt(np.square(r - self.rs) + np.square(z - self.zs))
+        # closest_cell = np.where(dist == dist.min())
 
         if return_cell:
             return cell
@@ -1977,19 +1985,19 @@ class OedgePlots:
             num_locs = int(5000)
             rs = np.linspace(r_start, r_end, num_locs)
             zs = np.linspace(z_start, z_end, num_locs)
-            probe_dict = {"r":[], "z":[], "psin":[], data:[], "ring":[], "knot":[]}
+            probe_dict = {"r": [], "z": [], "psin": [], data: [], "ring": [], "knot": []}
         else:
             rs = np.linspace(r_start, r_end, num_locs)
             zs = np.linspace(z_start, z_end, num_locs)
-            probe_dict = {"r":rs, "z":zs, "psin":[], data:[], "ring":[], "knot":[]}
+            probe_dict = {"r": rs, "z": zs, "psin": [], data: [], "ring": [], "knot": []}
 
         # If we want the Mach number (or speed), we need to do a little data
         # preprocessing first to see if the additional T13 drift option was on.
         if data in ['Mach', 'Velocity']:
 
             # Get the 2D data from the netCDF file.
-            scaling  = 1.0 / self.qtim
-            kvhs     = self.nc['KVHS'][:] * scaling
+            scaling = 1.0 / self.qtim
+            kvhs = self.nc['KVHS'][:] * scaling
 
             # Array to hold data with T13 data added on (will be same as
             # kvhs if T13 was off).
@@ -2007,14 +2015,14 @@ class OedgePlots:
 
                         # Get the relevant table for the extra drifts out of the .dat file.
                         add_data = self.dat_file.split('TABLE OF DRIFT REGION BY RING - RINGS ' + \
-                                                        'WITHOUT FLOW ARE NOT LISTED\n')[1]. \
-                                                        split('DRIFT')[0].split('\n')
+                                                       'WITHOUT FLOW ARE NOT LISTED\n')[1]. \
+                            split('DRIFT')[0].split('\n')
 
                         # Split the data between the spaces, put into DataFrame.
                         add_data = [line.split() for line in add_data]
                         add_df = pd.DataFrame(add_data[1:-1], columns=['IR', 'Vdrift (m/s)',
-                                              'S_START (m)', 'S_END (m)'], dtype=float). \
-                                              set_index('IR')
+                                                                       'S_START (m)', 'S_END (m)'], dtype=float). \
+                            set_index('IR')
 
                         # Loop through the KVHS data one cell at a time, and if
                         # the cell nas extra Mach flow, add it.
@@ -2027,9 +2035,8 @@ class OedgePlots:
 
                                         # Then add the drift along the appropriate s (or knot) range.
                                         if self.kss[ir][ik] > add_df['S_START (m)'].loc[ir] and \
-                                           self.kss[ir][ik] < add_df['S_END (m)'].loc[ir]:
-
-                                           kvhs_adj[ir][ik] = kvhs[ir][ik] + add_df['Vdrift (m/s)'].loc[ir]
+                                                self.kss[ir][ik] < add_df['S_END (m)'].loc[ir]:
+                                            kvhs_adj[ir][ik] = kvhs[ir][ik] + add_df['Vdrift (m/s)'].loc[ir]
 
                 except AttributeError:
                     print("Error: .dat file has not been loaded.")
@@ -2082,7 +2089,7 @@ class OedgePlots:
                 # Need to calculate the sound speed to back out the Mach number.
                 te = self.nc['KTEBS'][ring, knot]
                 ti = self.nc['KTIBS'][ring, knot]
-                mb = self.crmb * 931.49 * 10**6 / ((3*10**8)**2)
+                mb = self.crmb * 931.49 * 10 ** 6 / ((3 * 10 ** 8) ** 2)
                 cs = np.sqrt((te + ti) / mb)
                 if cs == 0.0:
                     probe = np.nan
@@ -2097,12 +2104,12 @@ class OedgePlots:
             # Plot of the connection length to the inner target.
             elif data == 'L OTF':
                 smax = self.nc['KSMAXS'][ring]
-                s    = self.nc['KSS'][ring, knot]
+                s = self.nc['KSS'][ring, knot]
                 probe = smax - s
                 ylabel = 'L ITF (m)'
 
             elif data == 'L ITF':
-                s    = self.nc['KSS'][ring, knot]
+                s = self.nc['KSS'][ring, knot]
                 probe = s
                 ylabel = 'L OTF (m)'
 
@@ -2116,9 +2123,9 @@ class OedgePlots:
 
             elif data == "nz":
                 if charge == "all":
-                    probe = self.nc["DDLIMS"][1:,:,:].sum(axis=0)[ring, knot]
+                    probe = self.nc["DDLIMS"][1:, :, :].sum(axis=0)[ring, knot]
                 else:
-                    probe = self.nc["DDLIMS"][charge+1:,:,:].sum(axis=0)[ring, knot]
+                    probe = self.nc["DDLIMS"][charge + 1, :, :][ring, knot]
                 ylabel = "nz (m-3)"
 
             elif data == "ring":
@@ -2128,6 +2135,10 @@ class OedgePlots:
             elif data == "neut_dens":
                 probe = self.nc["PINATO"][ring, knot]
                 ylabel = "Neutral Density (m-3)"
+
+            elif data.lower() == "zeff":
+                probe = self.nc["ZEFFS"][2, ring, knot]
+                ylabel = "Zeff"
 
             probe_dict["psin"].append(psin)
             probe_dict[data].append(float(probe))
@@ -2154,18 +2165,18 @@ class OedgePlots:
 
             if show_plot:
                 fig = plt.figure()
-                ax  = fig.add_subplot(111)
+                ax = fig.add_subplot(111)
                 ax.plot(x, y, lw=3, color='k')
                 ax.set_xlabel(xlabel, fontsize=fontsize)
                 ax.set_ylabel(ylabel, fontsize=fontsize)
-                ax.tick_params(axis='both', labelsize=fontsize*0.75)
+                ax.tick_params(axis='both', labelsize=fontsize * 0.75)
                 fig.tight_layout()
                 fig.show()
 
         return probe_dict
 
     def along_ring(self, ring, dataname, ylabel=None, charge=None, vz_mult=0.0,
-        plot_it=True, remove_zeros=True):
+                   plot_it=True, remove_zeros=True):
         """
         Plot data along a specified ring. Will return the x, y data just in case
         you want it.
@@ -2189,8 +2200,8 @@ class OedgePlots:
         def load_kvhs_adj_2d():
 
             # Get the 2D data from the netCDF file.
-            scaling  = 1.0 / self.qtim
-            kvhs     = self.nc['KVHS'][:] * scaling
+            scaling = 1.0 / self.qtim
+            kvhs = self.nc['KVHS'][:] * scaling
 
             # Array to hold data with T13 data added on (will be same as
             # kvhs if T13 was off).
@@ -2206,14 +2217,14 @@ class OedgePlots:
 
                     # Get the relevant table for the extra drifts out of the .dat file.
                     add_data = self.dat_file.split('TABLE OF DRIFT REGION BY RING - RINGS ' + \
-                                                    'WITHOUT FLOW ARE NOT LISTED\n')[1]. \
-                                                    split('DRIFT')[0].split('\n')
+                                                   'WITHOUT FLOW ARE NOT LISTED\n')[1]. \
+                        split('DRIFT')[0].split('\n')
 
                     # Split the data between the spaces, put into DataFrame.
                     add_data = [line.split() for line in add_data]
                     add_df = pd.DataFrame(add_data[1:-1], columns=['IR', 'Vdrift (m/s)',
-                                          'S_START (m)', 'S_END (m)'], dtype=float). \
-                                          set_index('IR')
+                                                                   'S_START (m)', 'S_END (m)'], dtype=float). \
+                        set_index('IR')
 
                     # Loop through the KVHS data one cell at a time, and if
                     # the cell has extra Mach flow, add it.
@@ -2222,13 +2233,12 @@ class OedgePlots:
                             if self.area[ir, ik] != 0.0:
 
                                 # If this ring has additional drifts to be added.
-                                if ir+1 in add_df.index:  # ir is zero-indexed
+                                if ir + 1 in add_df.index:  # ir is zero-indexed
 
                                     # Then add the drift along the appropriate s (or knot) range.
-                                    if self.kss[ir][ik] > add_df['S_START (m)'].loc[ir+1] and \
-                                       self.kss[ir][ik] < add_df['S_END (m)'].loc[ir+1]:
-
-                                       kvhs_adj[ir][ik] = kvhs[ir][ik] + add_df['Vdrift (m/s)'].loc[ir+1]
+                                    if self.kss[ir][ik] > add_df['S_START (m)'].loc[ir + 1] and \
+                                            self.kss[ir][ik] < add_df['S_END (m)'].loc[ir + 1]:
+                                        kvhs_adj[ir][ik] = kvhs[ir][ik] + add_df['Vdrift (m/s)'].loc[ir + 1]
                 return kvhs_adj
 
             except AttributeError:
@@ -2243,7 +2253,7 @@ class OedgePlots:
         # Get the parallel to B coordinate. Not sure why this "1" is needed, but
         # these is a like extra point in this KSB data to be ignored for the test
         # cases I work with.
-        x = self.nc['KSB'][:][ring-1][1:].data
+        x = self.nc['KSB'][:][ring - 1][1:].data
 
         # Some translations.
         if dataname in ['KVHS - Mach', 'KVHSimp - Mach']:
@@ -2314,38 +2324,38 @@ class OedgePlots:
             if dataname == 'Mach':
 
                 # Need to calculate the sound speed to back out the Mach number.
-                te = self.nc['KTEBS'][:][ring-1]
-                ti = self.nc['KTIBS'][:][ring-1]
-                mb = self.crmb * 931.49 * 10**6 / ((3*10**8)**2)
+                te = self.nc['KTEBS'][:][ring - 1]
+                ti = self.nc['KTIBS'][:][ring - 1]
+                mb = self.crmb * 931.49 * 10 ** 6 / ((3 * 10 ** 8) ** 2)
                 cs = np.sqrt((te + ti) / mb)
-                y  = kvhs_adj[ring-1] / cs
-                #ylabel = 'Mach'
+                y = kvhs_adj[ring - 1] / cs
+                # ylabel = 'Mach'
 
             elif dataname == 'Velocity':
-                y  = kvhs_adj[ring-1]
-                #ylabel = 'Velocity (m/s)'
+                y = kvhs_adj[ring - 1]
+                # ylabel = 'Velocity (m/s)'
 
         # If you want the impurity density, make sure you can handle the sum
         # across all the charge states or a specific charge state. Note we do
         # not do charge - 1 here since the zero index is actually neutrals.
-        elif dataname =='DDLIMS':
+        elif dataname == 'DDLIMS':
             scaling = self.absfac
             if charge == 'all':
-                #y = self.nc[dataname][:-1].sum(axis=0)[ring-1] * scaling
-                y = self.nc[dataname][1:].sum(axis=0)[ring-1] * scaling
+                # y = self.nc[dataname][:-1].sum(axis=0)[ring-1] * scaling
+                y = self.nc[dataname][1:].sum(axis=0)[ring - 1] * scaling
             else:
-                #y = self.nc[dataname][charge][ring-1] * scaling
-                y = self.nc[dataname][1+charge][ring-1] * scaling
+                # y = self.nc[dataname][charge][ring-1] * scaling
+                y = self.nc[dataname][1 + charge][ring - 1] * scaling
 
         # Pull from the forces data if you want a force plot.
         elif dataname.lower() in ['ff', 'fig', 'feg', 'fpg', 'fe', 'fnet', 'ff']:
 
             # Some constants and required factors.
             col_log = 15
-            qe      = 1.602E-19
-            amu_kg  = 1.66E-27
+            qe = 1.602E-19
+            amu_kg = 1.66E-27
             emi = 1.602192E-19 / 1.672614E-27
-            #fact = np.power(self.qtim, 2) * qe / amu_kg
+            # fact = np.power(self.qtim, 2) * qe / amu_kg
             fact = np.power(self.qtim, 2) * emi / self.crmi
 
             if dataname.lower() in ['fig', 'fnet']:
@@ -2356,16 +2366,16 @@ class OedgePlots:
                     return None
 
                 mu = self.crmi / (self.crmi + self.crmb)
-                beta = 3 * (mu + 5 * np.sqrt(2) * np.power(charge, 2) * \
-                       (1.1 * np.power(mu, 5/2)- 0.35 * np.power(mu, 3/2)) - 1) / \
+                beta = 3 * (mu + 5 * np.sqrt(2) * np.power(charge, 2) *
+                       (1.1 * np.power(mu, 5 / 2) - 0.35 * np.power(mu, 3 / 2)) - 1) / \
                        (2.6 - 2 * mu + 5.4 * np.power(mu, 2))
                 print("FiG: Beta = {:.2f}".format(beta))
 
                 # Again, must scale the gradient with this scaling factor.
-                #kfigs = self.read_data_2d('KFIGS', scaling = qe / fact)
+                # kfigs = self.read_data_2d('KFIGS', scaling = qe / fact)
 
-                kfigs = self.nc['KFIGS'][:][ring-1].data * qe / fact
-                #kfigs = self.nc['KFIGS'][:][ring].data / fact
+                kfigs = self.nc['KFIGS'][:][ring - 1].data * qe / fact
+                # kfigs = self.nc['KFIGS'][:][ring].data / fact
 
                 # Calculate the force.
                 fig = beta * kfigs
@@ -2378,8 +2388,8 @@ class OedgePlots:
                     print("Error: Must supply a charge state to calculate FF")
                     return None
 
-                ti = self.nc['KTIBS'][:][ring-1].data
-                ne = self.nc['KNBS'][:][ring-1].data
+                ti = self.nc['KTIBS'][:][ring - 1].data
+                ne = self.nc['KNBS'][:][ring - 1].data
 
                 # Slowing down time.
                 tau_s = 1.47E13 * self.crmi * ti * np.sqrt(ti / self.crmb) / \
@@ -2392,10 +2402,10 @@ class OedgePlots:
                 kvhs_adj = load_kvhs_adj_2d()
 
                 # Don't forget KVHS is scaled by 1/QTIM to get m/s.
-                #scaling = 1.0 / self.qtim
-                #vi = self.read_data_2d('KVHS', scaling=scaling)
-                #vi = self.nc['KVHS'][:][ring].data * scaling
-                vi = kvhs_adj[:][ring-1]
+                # scaling = 1.0 / self.qtim
+                # vi = self.read_data_2d('KVHS', scaling=scaling)
+                # vi = self.nc['KVHS'][:][ring].data * scaling
+                vi = kvhs_adj[:][ring - 1]
 
                 vz = vz_mult * vi
 
@@ -2404,28 +2414,25 @@ class OedgePlots:
                 y = np.array(ff, dtype=np.float64)
 
             if dataname.lower() in ['fe', 'fnet']:
-
                 # This also gets scaled by a factor as well in Jake's code.
-                #e_pol = self.read_data_2d('E_POL', scaling = qe / fact
-                e_pol = self.nc['E_POL'][:][ring-1].data * qe / fact
+                # e_pol = self.read_data_2d('E_POL', scaling = qe / fact
+                e_pol = self.nc['E_POL'][:][ring - 1].data * qe / fact
                 fe = charge * qe * e_pol
                 y = np.array(fe, dtype=np.float64)
 
             if dataname.lower() in ['feg', 'fnet']:
-
                 alpha = 0.71 * np.power(charge, 2)
 
                 # The electron temperature gradient from the code. I don't understand
                 # this scaling factor, but Jake uses it to get into presumably eV/m.
-                #kfegs = self.read_data_2d('KFEGS', scaling = qe / fact)
-                kfegs = self.nc['KFEGS'][:][ring-1] * qe / fact
+                # kfegs = self.read_data_2d('KFEGS', scaling = qe / fact)
+                kfegs = self.nc['KFEGS'][:][ring - 1] * qe / fact
 
                 # Calculate the force.
                 feg = alpha * kfegs
                 y = np.array(feg, dtype=np.float64)
 
             if dataname.lower() in ['fpg', 'fnet']:
-
                 # Parallel collisional diffusion time.
                 tau_par = 1.47E13 * self.crmi * ti * np.sqrt(ti / self.crmb) / \
                           (ne * np.power(charge, 2) * col_log)
@@ -2440,18 +2447,18 @@ class OedgePlots:
         else:
             # Get the data for this ring.
             if charge == None:
-                y = np.array(self.nc[dataname][:][ring-1].data, dtype=np.float64)
+                y = np.array(self.nc[dataname][:][ring - 1].data, dtype=np.float64)
             else:
-                y = np.array(self.nc[dataname][:][charge-1][ring-1].data, dtype=np.float64)
+                y = np.array(self.nc[dataname][:][charge - 1][ring - 1].data, dtype=np.float64)
 
         # Remove any (0, 0) data points that may occur due to fortran being fortran.
         drop_idx = np.array([], dtype=np.int)
         for i in range(0, len(x)):
-             #print("{}: {} {}".format(i, x[i]==0.0, y[i]==0.0))
-             if x[i] == 0.0 and y[i] == 0.0:
-                 drop_idx = np.append(drop_idx, i)
+            # print("{}: {} {}".format(i, x[i]==0.0, y[i]==0.0))
+            if x[i] == 0.0 and y[i] == 0.0:
+                drop_idx = np.append(drop_idx, i)
 
-        #print("{} drop_idx: {}".format(dataname, drop_idx))
+        # print("{} drop_idx: {}".format(dataname, drop_idx))
         if remove_zeros:
             x = np.delete(x, drop_idx)
             y = np.delete(y, drop_idx)
@@ -2462,7 +2469,7 @@ class OedgePlots:
             ax.plot(x, y, 'k-')
             ax.set_xlabel('S (m)', fontsize=18)
             ax.set_ylabel(ylabel, fontsize=18)
-            ax.tick_params(axis='both', labelsize=18*0.75)
+            ax.tick_params(axis='both', labelsize=18 * 0.75)
             fig.tight_layout()
             fig.show()
 
@@ -2481,7 +2488,7 @@ class OedgePlots:
 
         # First plot the knot to make sure it's the one you want the midpoint
         # to be at.
-        self.plot_contour_polygon('Knot', vmin=knot-1, vmax=knot+1, lut=3)
+        self.plot_contour_polygon('Knot', vmin=knot - 1, vmax=knot + 1, lut=3)
 
         # Load the Snorm data in 2D format.
         snorm = self.nc['KSB'][:] / self.ksmaxs[:, None]
@@ -2494,14 +2501,13 @@ class OedgePlots:
             soffset_mult = 1.0
             print("Plasma is LSN...")
 
-        print("Lines for input: {}".format(self.irwall-self.irsep+1))
+        print("Lines for input: {}".format(self.irwall - self.irsep + 1))
         print("Copy/paste under option G55 in input file:")
 
         # Print out the offset for each ring one at a time.
-        for ring in range(self.irsep, self.irwall+1):
-            soffset = soffset_mult * snorm[ring-1][knot-1] / 2.0  # Ring and knot are 1-indexed here
+        for ring in range(self.irsep, self.irwall + 1):
+            soffset = soffset_mult * snorm[ring - 1][knot - 1] / 2.0  # Ring and knot are 1-indexed here
             print("{:8}{:8}{:8}{:10.6f}".format(1, ring, ring, soffset))
-
 
     def collector_probe(self, r1, z1, r2, z2, showplot=True, numlocs=20):
         """
@@ -2515,15 +2521,15 @@ class OedgePlots:
 
         # Find the rings that the start and end location span. That's how many
         # data points we will have.
-        #ir1, ik1 = self.find_ring_knot(r1, z1)
-        #ir2, ik2 = self.find_ring_knot(r2, z2)
+        # ir1, ik1 = self.find_ring_knot(r1, z1)
+        # ir2, ik2 = self.find_ring_knot(r2, z2)
 
         numlocs = numlocs
         cprs = np.linspace(r1, r2, numlocs)
         cpzs = np.linspace(z1, z2, numlocs)
 
-        cp = {"r":[], "z":[], "ir":[], "ik":[], "nz_avg1":[], "nz_avg2":[],
-            "te":[], "ti":[], "cs":[], "flux1":[], "flux2":[], "rmrsomp":[]}
+        cp = {"r": [], "z": [], "ir": [], "ik": [], "nz_avg1": [], "nz_avg2": [],
+              "te": [], "ti": [], "cs": [], "flux1": [], "flux2": [], "rmrsomp": []}
         for i in range(0, numlocs):
             print(i)
 
@@ -2542,20 +2548,20 @@ class OedgePlots:
 
             # Store this location's R-Rsep @ OMP value. The values are !-indexed,
             # but we need to make it 0-indexed for indexing arrays.
-            rmrsomp = float(self.nc["MIDIST"][1][ir-1])
+            rmrsomp = float(self.nc["MIDIST"][1][ir - 1])
             cp["rmrsomp"].append(rmrsomp)
 
             # The CP will collect from half the field line (the whole Lcoll
             # thing from Peter's 1985 paper can be added later). The average
             # density each side probe "sees" is then that over half the field
             # line in each direction.
-            s = self.nc["KSS"][ir-1].data
-            #mask = s > 0
-            #s = s[mask]
+            s = self.nc["KSS"][ir - 1].data
+            # mask = s > 0
+            # s = s[mask]
             smax = max(s)
-            sint = s[ik-1]
-            scoll1 = sint + (smax-sint) / 2
-            scoll2 = sint - (smax-sint) / 2
+            sint = s[ik - 1]
+            scoll1 = sint + (smax - sint) / 2
+            scoll2 = sint - (smax - sint) / 2
 
             # If either are negative, just means we exceeded the field line
             # length and to default to half the distance.
@@ -2575,11 +2581,11 @@ class OedgePlots:
             # at the end of the ring so there is no impurity to be collected.
             _, nz = self.along_ring(ir, "DDLIMS", charge="all", plot_it=False)
             if scoll1_ik != len(nz):
-                nz_avg1 = np.trapz(nz[ik-1:scoll1_ik], s[ik-1:scoll1_ik]) / (scoll1 - sint)
+                nz_avg1 = np.trapz(nz[ik - 1:scoll1_ik], s[ik - 1:scoll1_ik]) / (scoll1 - sint)
             else:
                 nz_avg1 = 0.0
             if scoll2_ik != len(nz):
-                nz_avg2 = np.trapz(nz[scoll2_ik-1:ik], s[scoll2_ik-1:ik]) / (sint - scoll2)
+                nz_avg2 = np.trapz(nz[scoll2_ik - 1:ik], s[scoll2_ik - 1:ik]) / (sint - scoll2)
             else:
                 nz_avg2 = 0.0
                 print(" Doink")
@@ -2588,9 +2594,9 @@ class OedgePlots:
 
             # For the sound speed, which is needed for the flux (nz * cs), we
             # just use the sound speed at the probe location. Bit ad-hoc.
-            te = float(self.nc["KTEBS"][ir-1, ik-1])
-            ti = float(self.nc["KTIBS"][ir-1, ik-1])
-            mb = self.crmb * 931.49 * 10**6 / ((3*10**8)**2)
+            te = float(self.nc["KTEBS"][ir - 1, ik - 1])
+            ti = float(self.nc["KTIBS"][ir - 1, ik - 1])
+            mb = self.crmb * 931.49 * 10 ** 6 / ((3 * 10 ** 8) ** 2)
             cs = np.sqrt((te + ti) / mb)
             cp["te"].append(te)
             cp["ti"].append(ti)
@@ -2614,7 +2620,7 @@ class OedgePlots:
 
 # ------------------------
 # End of OedgePlots class.
-#-------------------------
+# -------------------------
 
 
 def combine_imp_plot(ncpaths=None, **args):
@@ -2634,7 +2640,8 @@ def combine_imp_plot(ncpaths=None, **args):
     # Needed for the file prompt.
     import tkinter as tk
     from tkinter import filedialog
-    root = tk.Tk(); root.withdraw()
+    root = tk.Tk()
+    root.withdraw()
 
     # First ask the user to select all their runs to be combined.
     if ncpaths == None:
@@ -2645,11 +2652,11 @@ def combine_imp_plot(ncpaths=None, **args):
             # Shanw's run directory because he wrote the code and can do this.
             initialdir = '/mnt/c/Users/Shawn/Documents/d3d_work/DIVIMP Runs/'
             ncpaths = tk.filedialog.askopenfilenames(
-                  filetypes=(('NetCDF files', '*.nc'),),
-                  initialdir=initialdir)
+                filetypes=(('NetCDF files', '*.nc'),),
+                initialdir=initialdir)
         except:
             ncpaths = tk.filedialog.askopenfilenames(
-                  filetypes=(('NetCDF files', '*.nc'),))
+                filetypes=(('NetCDF files', '*.nc'),))
 
     # Load OedgePlots objects of each of these, and grab the impurity data.
     ops = []
@@ -2669,6 +2676,6 @@ def combine_imp_plot(ncpaths=None, **args):
     # using the own_data option. Supply random dataname since its required, but
     # it gets overwritten by our own_data anyways.
     ops[0].plot_contour_polygon('KTIBS', own_data=ddlims_avg, normtype='log',
-                cbar_label='Tungsten Density (m-3)', cmap='nipy_spectral', **args)
+                                cbar_label='Tungsten Density (m-3)', cmap='nipy_spectral', **args)
 
     return ncpaths, ops

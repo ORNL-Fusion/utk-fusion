@@ -106,7 +106,7 @@ class LimPlots:
         --- Output ---
         """
 
-        #The deposition array.
+        # The deposition array.
         dep_arr = self.get_dep_array()
 
         # Location of each P bin, and its width.
@@ -184,12 +184,19 @@ class LimPlots:
         cl    = float(nc['CL'][:].data)
         ca    = float(nc['CA'][:].data)
         caw   = float(nc['CAW'][:].data)
-        cion  = int(nc["CION"][:].data)
+        try:
+            cion  = int(nc["CION"][:].data)
+        except:
+            cion = None
         xouts = nc['XOUTS'][:].data
         youts = nc['YOUTS'][:].data
         xwids = nc["XWIDS"][:].data
-        yabsorb1a = float(nc["yabsorb1a"][:].data)
-        yabsorb2a = float(nc["yabsorb2a"][:].data)
+        try:
+            yabsorb1a = float(nc["yabsorb1a"][:].data)
+            yabsorb2a = float(nc["yabsorb2a"][:].data)
+        except:
+            yabsorb1a = -99
+            yabsorb2a = 99
 
         # Drop bins with zero widths (arrays are made larger than necessary).
         mask = xwids != 0
@@ -346,7 +353,7 @@ class LimPlots:
             Z = np.ma.masked_where(Z<=0, Z)
             cmap = "inferno"
             if type(vmin) == type(None):
-                vmin = Z[Z != 0].min() * 10000
+                vmin = Z[Z != 0].min() * 100
             if type(vmax) == type(None):
                 vmax = Z.max()
             norm = mpl.colors.LogNorm(vmin=vmin, vmax=vmax, clip=True)
