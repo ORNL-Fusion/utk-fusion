@@ -191,12 +191,20 @@ class LimPlots:
         xouts = nc['XOUTS'][:].data
         youts = nc['YOUTS'][:].data
         xwids = nc["XWIDS"][:].data
+
+        # Pull out the min/maximum bounds for the primary absorbing boundaries.
         try:
             yabsorb1a = float(nc["yabsorb1a"][:].data)
             yabsorb2a = float(nc["yabsorb2a"][:].data)
         except:
             yabsorb1a = -99
             yabsorb2a = 99
+        if yabsorb1a > yabsorb2a:
+            yabsorb_max = yabsorb1a
+            yabsorb_min = yabsorb2a
+        else:
+            yabsorb_max = yabsorb2a
+            yabsorb_min = yabsorb1a
 
         # Drop bins with zero widths (arrays are made larger than necessary).
         mask = xwids != 0
@@ -214,8 +222,8 @@ class LimPlots:
             neg_bound = bounds2a[pol_idx]
             vary_2d_bound = True
         except:
-            pos_bound = np.full(len(step_y), yabsorb1a)
-            neg_bound = np.full(len(step_y), yabsorb2a)
+            pos_bound = np.full(len(step_y), yabsorb_max)
+            neg_bound = np.full(len(step_y), yabsorb_min)
             vary_2d_bound = False
             pass
 
@@ -295,9 +303,9 @@ class LimPlots:
         # associated data points as well. This is done to stop this data from
         # messing up the contours in the contour plot.
         xkeep_min = np.nonzero(xouts)[0].min()
-        xkeep_max = np.nonzero(xouts)[0].max()
+        xkeep_max = np.nonzero(xouts)[0].max()+1 # Without the extra 1 final number will be trimmed
         ykeep_min = np.nonzero(youts)[0].min()
-        ykeep_max = np.nonzero(youts)[0].max()
+        ykeep_max = np.nonzero(youts)[0].max()+1
         xouts = xouts[xkeep_min:xkeep_max]
         youts = youts[ykeep_min:ykeep_max]
         xwids = xwids[xkeep_min:xkeep_max]
@@ -305,7 +313,7 @@ class LimPlots:
 
         # Furthermore, trim the data off that is beyond the absorbing
         # boundaries.
-        ykeep = np.where(np.logical_and(youts>=yabsorb2a, youts<=yabsorb1a))[0]
+        ykeep = np.where(np.logical_and(youts>=yabsorb_min, youts<=yabsorb_max))[0]
         youts = youts[ykeep]
         Z = Z[ykeep, :]
 
