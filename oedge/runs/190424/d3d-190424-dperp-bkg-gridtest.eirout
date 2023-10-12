@@ -1,0 +1,1262 @@
+ *** 1. DATA FOR OPERATING MODE 
+ *** 3A. DATA FOR NON DEFAULT STANDARD SURFACES
+ *** 3B. DATA FOR ADDITIONAL SURFACES           
+ *** 4. DATA FOR SPECIES SPECIFICATION AND   
+        ATOMIC PHYSICS MODULE                
+        ATOMIC REACTION CARDS, NREACI DATA FIELDS
+ *4A.   NEUTRAL ATOMS SPECIES CARDS, NATMI SPECIES
+ *4B.   NEUTRAL MOLECULE SPECIES CARDS, NMOLI SPECIES
+ *4C.   TEST IONS SPECIES CARDS, NIONI SPECIES 
+ *4D.   PHOTONS SPECIES CARDS, NPHOTI SPECIES 
+ *** 5. DATA FOR PLASMA BACKGROUND            
+ *5A.   BULK ION SPECIES CARDS, NPLSI SPECIES 
+ *** 6. GENERAL DATA FOR REFLECTION MODEL    
+ *** 7. DATA FOR PRIMARY SOURCES, NSTRAI STRATA
+ *** 8. ADDITIONAL DATA FOR SPECIFIC ZONES 
+ *** 9. DATA FOR STATISTIC AND NONANALOG MODEL 
+        CARDS FOR STANDARD DEVIATION 
+ *** 10. DATA FOR ADDITIONAL TALLIES, COLLISION   
+         ESTIMATORS  AND ALGEBRAIC EXPRESSIONS  
+ *** 10A. DATA FOR ADDITIONAL TALLIES           
+ *** 10B. DATA FOR COLLISION ESTIMATORS         
+ *** 10C. DATA FOR ALGEBRAIC EXPRESSIONS     
+ *** 10D. DATA FOR ADDITIONAL SURFACE TALLIES   
+ *** 10E. DATA FOR ALGEBRAIC SURFACE TALLIES 
+ *** 10F. DATA FOR SPECTRA 
+ *** 11. DATA FOR NUMERICAL AND GRAPHICAL OUTPUT  
+ *** 12. DATA FOR DIAGNOSTIC MODULE 
+ *** 13. DATA FOR ITERATIVE AND TIME DEP. OPTION 
+ *** 14. DATA FOR INTERFACING ROUTINE "INFCOP" 
+ N1ST =        20051
+ N2ND =            1
+ N3RD =            1
+ NADD =            1
+ NTOR =          100
+ NRTAL =            0
+ NLIM =            1
+ NSTS =            8
+ NPLG =            1
+ NPPART =            1
+ NKNOT =        10217
+ NTRI =        20051
+ NTETRA =            1
+ NCOORD =            1
+ NOPTIM =            1
+ NOPTM1 =            1
+ NSTRA =            3
+ NSRFS =            1
+ NSTEP =            2
+ NATM =            1
+ NMOL =            1
+ NION =            1
+ NPLS =            1
+ NADV =            7
+ NADS =            0
+ NCLV =            0
+ NSNV =            0
+ NALV =            0
+ NALS =            0
+ NAIN =            3
+ NCOP =            0
+ NBGK =            0
+ NSD =            7
+ NSDW =            1
+ NCV =            1
+ NREAC =           41
+ NREC =            1
+ NRDS =            1
+ NRCX =            1
+ NREL =            1
+ NRPI =            1
+ NGEOM_USR =            0
+ NCOUP_INPUT =            0
+ NSMSTRA =            1
+ NSTORAM =            9
+ NGSTAL =            1
+ NRPES  =            1
+  Number of PEs            1
+      
+      
+ DATE:   3  3 2023
+ TIME:  14 21 37
+      
+      
+ * CMOD (OSM-EIRENE INTERFACE) TEMPLATE                                  
+      
+ *                                                                       
+      
+ * Aquired from DR in 02.2005                                            
+      
+ *                                                                       
+      
+      
+      
+      
+ *** 1. DATA FOR OPERATING MODE                   
+      
+        EIRENE RUN ON IBM                       
+      
+        EIRENE RUN AS STAND ALONE CODE          
+        INTERFACING ROUTINE INFCOP IS NOT CALLED
+      
+        EIRENE ASSUMES A TOTAL CPUTIME 
+        OF           30  SECONDS
+      
+      
+        EIRENE SAVES GEOMETRICAL DATA 
+        ON FILE FT12
+      
+        EIRENE SAVES PLASMA DATA, A&M DATA
+        AND SOURCE DISTRIBUTION DATA
+        ON FILE FT13 AT END OF RUN, I.E., AFTER
+        LAST TIMESTEP OR ITERATION 
+      
+      
+      
+        EIRENE RUN IN NONITERATIVE MODE     
+      
+        EIRENE RUN IN STATIONARY MODE         
+      
+ *** 2. DATA FOR STANDARD MESH                
+      
+ *** 3A. DATA FOR NON DEFAULT STANDARD SURFACES
+         NSTSI=            8
+      
+ *** 3B. DATA FOR ADDITIONAL SURFACES           
+         NLIMI=            1
+      
+ * testing                                                               
+ *** 4. DATA FOR SPECIES SPECIFICATION AND   
+        ATOMIC PHYSICS MODULE                
+      
+        ATOMIC REACTION CARDS, NREACI DATA FIELDS
+        NREACI=           36
+      
+ *4A.   NEUTRAL ATOMS SPECIES CARDS, NATMI SPECIES
+        NATMI=            1
+      
+ *4B.   NEUTRAL MOLECULE SPECIES CARDS, NMOLI SPECIES
+        NMOLI=            1
+      
+ *4C.   TEST IONS SPECIES CARDS, NIONI SPECIES 
+        NIONI=            1
+      
+ *4D.   NEUTRAL PHOTONS SPECIES CARDS, NPHOTI SPECIES
+        NPHOTI=            0
+      
+ *** 5. DATA FOR PLASMA BACKGROUND            
+      
+ *5A.   BULK ION SPECIES CARDS, NPLSI SPECIES 
+        NPLSI=            1
+      
+ *5B.   PLASMA BACKGROUND DATA                
+ ONE INPUT LINE MISSING IN BLOCK 5 
+ AUTOMATIC CORRECTION PERFORMED 
+ *** 6. GENERAL DATA FOR REFLECTION MODEL    
+      
+  PATH = ./TRIM/                                                     
+  NFR =           1  FILNAM = D_on_W  
+  FILE = ./TRIM/D_on_W                                                                   
+  NFR =           2  FILNAM = D_on_Mo 
+  FILE = ./TRIM/D_on_Mo                                                                  
+  NFR =           3  FILNAM = D_on_Fe 
+  FILE = ./TRIM/D_on_Fe                                                                  
+  NFR =           4  FILNAM = D_on_C  
+  FILE = ./TRIM/D_on_C                                                                   
+  NFR =           5  FILNAM = D_on_Be 
+  FILE = ./TRIM/D_on_Be                                                                  
+ *** 7. DATA FOR PRIMARY SOURCES, NSTRAI STRATA   
+        NSTRAI=            3
+      
+ *** 8. ADDITIONAL DATA FOR SPECIFIC ZONES 
+        NZADD=            0
+      
+ *** 9. DATA FOR STATISTIC AND NONANALOG MODEL   
+      
+        CARDS FOR STANDARD DEVIATION 
+        NSIGVI,NSIGSI,NSIGCI=            7           0           0
+        NSIGI_BGK,NSIGI_COP =            0           1
+        NSIGI_SPC           =            0
+      
+ *** 10. DATA FOR ADDITIONAL TALLIES, COLLISION   
+         ESTIMATORS  AND ALGEBRAIC EXPRESSIONS    
+         NADVI,NCLVI,NALVI=            7           0           0
+         NADSI,NALSI,NADSPC=            0           0           0
+      
+ *** 10A. DATA FOR ADDITIONAL TALLIES           
+ *** 10B. DATA FOR COLLISION ESTIMATORS         
+ *** 10C. DATA FOR ALGEBRAIC EXPRESSIONS     
+ *** 10D. DATA FOR ADDITIONAL SURFACE TALLIES   
+ *** 10E. DATA FOR ALGEBRAIC SURFACE TALLIES 
+ *** 10F. DATA FOR SPECTRA                   
+      
+ *** 11. DATA FOR NUMERICAL AND GRAPHICAL OUTPUT  
+         NVOLPR=            4
+      
+         NSURPR=            0
+      
+         NVOLPL=            0
+      
+ *** 12. DATA FOR DIAGNOSTIC MODULE              
+         NCHORI,NCHENI=            0           0
+      
+ *** 13. DATA FOR ITERATIVE AND TIME DEP. OPTION 
+         NPRNLI=            0
+      
+1         
+ *** 14. DATA FOR INTERFACING ROUTINE "INFCOP"   
+         SUBR. INFCOP NOT CALLED. 
+         NAINI, NCOPI =            3           0
+1         
+      
+      
+      
+      
+ SUBROUTINE WRMESH CALLED 
+      
+ NUMBER OF CONTOURS FOR FEM MESH:            0
+      
+  VOLTOT        14623790.218919735     
+  VOLTOT_TAL    14623790.218919735     
+  PROUSR: NO DATA PROVIDED FOR INDEX            9
+ STEPFUNCTION NO. ISTEP=            1  INITIALISED
+      
+ STEPFUNCTION NO. ISTEP=            2  INITIALISED
+      
+      
+      
+      
+      
+      
+      
+ WARNING: TR.L.EST NOT AVAILABLE FOR MOM.-BALANCE 
+ IREL =            1
+ AUTOMATICALLY RESET TO COLLISION ESTIMATOR 
+      
+ WARNING: TR.L.EST NOT AVAILABLE FOR EN.-BALANCE 
+ IREL =            1
+ AUTOMATICALLY RESET TO COLLISION ESTIMATOR 
+      
+      
+      
+  BREMSSTRAHLUNG =    5.1461628072320543E+018
+ TEST ION D2+      CAN BE CONDENSED
+      
+      
+  LIST OF CONTRIBUTIONS TO BACKGROUND SPECIES 
+      
+      
+ COEFFICIENTS FOR ADDITIONAL SURFACES
+ THIS IS AFTER GEOUSR, SETEQ AND SETFIT ARE CALLED 
+      
+      
+ * testing                                                               
+      
+ A0          19.399999999999999     
+ A1,A2,A3   -1.0000000000000000        0.0000000000000000        0.0000000000000000     
+ A4,A5,A6    0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ A7,A8,A9    0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ JUMLIM            1
+ ISWICH(1),ISWICH(2),ISWICH(3),ISWICH(4),ISWICH(5),ISWICH(6)
+           0           0           0           0           0           0
+      
+      
+
+
+
+ IGJUM0 
+
+      I 123456789
+ -------------------------
+    1 I 000000000
+      
+
+
+
+ IGJUM1 
+
+      I 123456789
+ -------------------------
+    1 I 100000000
+    2 I 000000000
+    3 I 000000000
+    4 I 000000000
+    5 I 000000000
+    6 I 000000000
+    7 I 000000000
+    8 I 000000000
+    9 I 000000000
+      
+
+
+
+ IGJUM2 
+
+      I 123456789
+ -------------------------
+    1 I 100000000
+    2 I 010000000
+    3 I 001000000
+    4 I 000100000
+    5 I 000010000
+    6 I 000001000
+    7 I 000000100
+    8 I 000000010
+    9 I 000000001
+      
+
+
+
+ IGJUM3 
+
+      I 123456789
+ -------------------------
+    1 I 000000000
+      
+ J,NLIMII,NLIMIE               1        1        1
+ CPU-TIME CONSUMED IN INPUT:   0.24294099999999999       SEC
+      
+      
+      
+      
+ ========================================================================
+ ========================================================================
+ TALLY:   PLASMA TEMPERATURE                                                      
+ SPECIES: D+                      
+ UNITS:   EV                      
+ ========================================================================
+ ========================================================================
+      
+ BLOCK AVERAGE   7.3312E+01
+ ========================================================================
+      
+      
+      
+      
+ ========================================================================
+ ADDITIONAL CELLS 
+ ========================================================================
+    1    2.0000E-02
+      
+      
+      
+      
+ WEIGHTED MEAN VALUE ("UNITS")               
+ MEAN:        7.3312E+01
+      
+      
+      
+      
+      
+      
+ ========================================================================
+ ========================================================================
+ TALLY:   PLASMA DENSITY (BULK PARTICLES)                                         
+ SPECIES: ELECTRONS               
+ UNITS:   CM**-3                  
+ ========================================================================
+ ========================================================================
+      
+ BLOCK AVERAGE   7.4037E+12
+ ========================================================================
+      
+      
+      
+      
+ ========================================================================
+ ADDITIONAL CELLS 
+ ========================================================================
+    1    1.0000E+02
+      
+      
+      
+      
+ WEIGHTED TOTAL ("UNITS*CM**3"), MEAN ("UNITS")
+ TOTAL, MEAN:         1.0827E+20     7.4037E+12
+      
+      
+      
+      
+      
+      
+ ========================================================================
+ ========================================================================
+ TALLY:   PLASMA DENSITY (BULK PARTICLES)                                         
+ SPECIES: D+                      
+ UNITS:   CM**-3                  
+ ========================================================================
+ ========================================================================
+      
+ BLOCK AVERAGE   7.4037E+12
+ ========================================================================
+      
+      
+      
+      
+ ========================================================================
+ ADDITIONAL CELLS 
+ ========================================================================
+    1    1.0000E+02
+      
+      
+      
+      
+ WEIGHTED TOTAL ("UNITS*CM**3"), MEAN ("UNITS")
+ TOTAL, MEAN:         1.0827E+20     7.4037E+12
+      
+      
+      
+      
+      
+ CPU-TIME CONSUMED IN XSECT:    3.0249999999999999E-003  SEC
+      
+      
+ DEBUG: REC A           1           1 F
+ DEBUG: REC B           1
+ DEBUG: REC C       20052
+ DEBUG: REC D           0
+ DEBUG: REC D           0 T
+ DEBUG: REC D           1           1
+ DEBUG: REC D   22100000000000.000     
+ DEBUG: REC D       20053       20053
+      
+ DIAGNOSTICS FROM SUBR. SAMVOL: 
+      
+ VOLUME RECOMBINATION RATES INTEGRATED OVER
+ ENTIRE COMPUTATIONAL GRID 
+      
+ RECOMBINATION ION PARTICLE LOSS (AMP): 
+ IPLS,IRRC, SREC          D+        1  -8.7328E+00
+      
+ RECOMBINATION ION ENERGY LOSS (WATT): 
+ IPLS,IRRC,EIO            D+        1  -5.2851E+02
+      
+ RECOMBINATION ELECTRON ENERGY LOSS (WATT): 
+ IPLS,IRRC,EEL            D+        1  -1.0812E+02
+      
+ RECOMBINATION PARALLEL MOMENTUM LOSS : 
+ IPLS,IRRC,MOM            D+        1   0.0000E+00
+      
+ BREMSSTRAHLUNG: 
+ IPLS,TOT.BREMSSTRAHLUNG  D+        0   2.7197E+02
+      
+ WARNING FROM SAMVL0, ISTRA=            3
+ NEW INPUT FOR INGRDA(.,.,1),INGRDE(.,.,1)
+ AUTOMATIC CORRECTION CARRIED OUT 
+      
+      
+ SUB-STRATUM WEIGHT REDEFINED 
+ ISRFSI,ISTRA,SORWGT             1        3     8.7328E+00
+ IRRC,IPLS,ICMX                0        1    18549
+      
+ SOURCE STRENGTH REDEFINED 
+ ISTRA, FLUX, EIFLUX             3     8.7328E+00    -5.2851E+02
+      
+ FUNCTION STEP NO.            1 : 
+    K  RRSTEP      FLSTEP( 1)
+    1  0.0000E+00  6.3209E+02
+    2  2.7052E-01  5.9707E+02
+    3  5.6668E-01  5.3469E+02
+    4  8.9550E-01  4.6061E+02
+    5  1.2606E+00  3.7944E+02
+    6  1.6654E+00  2.9604E+02
+    7  2.1143E+00  2.2744E+02
+    8  2.6157E+00  1.6987E+02
+    9  3.1764E+00  7.0982E+01
+   10  4.2662E+00  4.2173E+01
+   11  5.7252E+00  3.0163E+01
+   12  7.3289E+00  2.7360E+02
+   13  7.8474E+00  3.3340E+02
+   14  8.3006E+00  3.3971E+02
+   15  8.7720E+00  3.4403E+02
+   16  9.2671E+00  3.4878E+02
+   17  9.7852E+00  3.5805E+02
+   18  1.0319E+01  3.7061E+02
+   19  1.0866E+01  3.7920E+02
+   20  1.1430E+01  3.5640E+02
+   21  1.2012E+01  3.5348E+02
+   22  1.2612E+01  3.6238E+02
+   23  1.3228E+01  3.7159E+02
+   24  1.3861E+01  3.8179E+02
+   25  1.4510E+01  3.9193E+02
+   26  1.5174E+01  4.0193E+02
+   27  1.5853E+01  4.1296E+02
+   28  1.6546E+01  4.2421E+02
+   29  1.7253E+01  4.3629E+02
+   30  1.7973E+01  4.5303E+02
+   31  1.8699E+01  4.6647E+02
+   32  1.9436E+01  4.8040E+02
+   33  2.0183E+01  4.9063E+02
+   34  2.0946E+01  4.5746E+02
+   35  2.1800E+01  4.8901E+02
+   36  2.2633E+01  5.4151E+02
+   37  2.3415E+01  5.9260E+02
+   38  2.4158E+01  6.1186E+02
+   39  2.4905E+01  6.3158E+02
+   40  2.5655E+01  6.5172E+02
+   41  2.6410E+01  6.7120E+02
+   42  2.7110E+01  6.9183E+02
+   43  2.7928E+01  7.0998E+02
+   44  2.8395E+01  7.2316E+02
+   45  2.8854E+01  1.6446E+02
+   46  3.0948E+01  5.6929E+01
+   47  3.7358E+01  1.1845E-06
+   48  3.7936E+01  1.1508E-06
+   49  3.8603E+01  1.1178E-06
+   50  3.9259E+01  1.0910E-06
+   51  3.9896E+01  9.9157E-07
+   52  4.0564E+01  7.9771E-07
+   53  4.1354E+01  5.9528E-07
+   54  4.2366E+01  3.4233E-07
+   55  4.4031E+01  6.2740E-07
+   56  4.5278E+01  5.7481E-06
+   57  4.6292E+01  1.9062E-05
+   58  4.8340E+01  1.3936E-04
+   59  4.9972E+01  9.1868E-04
+   60  5.1252E+01  4.6290E-03
+   61  5.2153E+01  2.2698E-02
+   62  5.3213E+01  1.0850E-01
+   63  5.3928E+01  3.6824E-01
+   64  5.4784E+01  1.2314E+00
+   65  5.5537E+01  3.6136E+00
+   66  5.6263E+01  1.9559E+01
+   67  5.6623E+01  5.3058E+01
+   68  5.6946E+01  1.3235E+02
+   69  5.7223E+01  3.6260E+02
+   70  5.7453E+01  5.3204E+02
+   71  5.7665E+01  6.1784E+02
+   72  5.7880E+01  6.4005E+02
+   73  5.8116E+01
+      
+ FLUXES: PART., KINET., SHEATH; INTEGRATED:
+ IP,FLUX      [A]        1     1.2789E+04
+ IP,EKIN-FLUX [W]        1     0.0000E+00
+ IP,ESH-FLUX  [W]        1     0.0000E+00
+      
+      
+  XI    0.0000000000000000     
+  XE    1.0000000000000000     
+ FLUX ONTO SOURCE SURFACE [A]            1   12789.325572419575     
+      
+      
+ FUNCTION STEP NO.            2 : 
+    K  RRSTEP      FLSTEP( 1)
+    1  0.0000E+00  1.0141E+03
+    2  1.1495E-01  1.0108E+03
+    3  2.3444E-01  9.7691E+02
+    4  3.5737E-01  8.5495E+02
+    5  4.9050E-01  7.2073E+02
+    6  6.3410E-01  5.8569E+02
+    7  7.8868E-01  4.6629E+02
+    8  9.5455E-01  3.6188E+02
+    9  1.1322E+00  2.7751E+02
+   10  1.3220E+00  2.0850E+02
+   11  1.5244E+00  1.5286E+02
+   12  1.7398E+00  4.2016E+02
+   13  1.9686E+00  4.2055E+02
+   14  2.2113E+00  4.2097E+02
+   15  2.4683E+00  4.2138E+02
+   16  2.7401E+00  4.2185E+02
+   17  3.0272E+00  4.2225E+02
+   18  3.3299E+00  4.2271E+02
+   19  3.6488E+00  4.2319E+02
+   20  3.9843E+00  3.8902E+02
+   21  4.3367E+00  3.7707E+02
+   22  4.7067E+00  3.7746E+02
+   23  5.0947E+00  3.7786E+02
+   24  5.5011E+00  3.7821E+02
+   25  5.9263E+00  3.7858E+02
+   26  6.3709E+00  3.7884E+02
+   27  6.8355E+00  3.7900E+02
+   28  7.3206E+00  3.7907E+02
+   29  7.8266E+00  3.7904E+02
+   30  8.3541E+00  3.7880E+02
+   31  8.9040E+00  3.7830E+02
+   32  9.4768E+00  3.7770E+02
+   33  1.0073E+01  3.7672E+02
+   34  1.0694E+01  3.7544E+02
+   35  1.1341E+01  3.7379E+02
+   36  1.2015E+01  3.7155E+02
+   37  1.2716E+01  3.6867E+02
+   38  1.3448E+01  3.6558E+02
+   39  1.4212E+01  3.6159E+02
+   40  1.5009E+01  3.5656E+02
+   41  1.5843E+01  3.5170E+02
+   42  1.6649E+01  2.1325E+02
+   43  1.8248E+01  2.1033E+02
+   44  1.9190E+01  3.0923E+01
+   45  2.6741E+01  3.4584E+02
+   46  2.7725E+01  3.3707E+02
+   47  2.8901E+01  5.9600E-07
+   48  2.9854E+01  5.8343E-07
+   49  3.0934E+01  5.7957E-07
+   50  3.1959E+01  4.4333E-07
+   51  3.3212E+01  5.6088E-07
+   52  3.4143E+01  4.7101E-07
+   53  3.5185E+01  4.6229E-07
+   54  3.6179E+01  4.6874E-07
+   55  3.7098E+01  6.8352E-07
+   56  3.7953E+01  5.1433E-06
+   57  3.8778E+01  3.3994E-05
+   58  3.9603E+01  1.4337E-04
+   59  4.0718E+01  7.1741E-04
+   60  4.1868E+01  3.0586E-03
+   61  4.2805E+01  7.0626E-02
+   62  4.3033E+01  3.1367E-01
+   63  4.3199E+01  1.1436E+00
+   64  4.3385E+01  3.9950E+00
+   65  4.3542E+01  1.2361E+01
+   66  4.3687E+01  3.5578E+01
+   67  4.3822E+01  9.3641E+01
+   68  4.3945E+01  2.1892E+02
+   69  4.4059E+01  5.4866E+02
+   70  4.4162E+01  8.1588E+02
+   71  4.4256E+01  9.5421E+02
+   72  4.4350E+01  1.0046E+03
+   73  4.4451E+01
+      
+ FLUXES: PART., KINET., SHEATH; INTEGRATED:
+ IP,FLUX      [A]        1     8.4744E+03
+ IP,EKIN-FLUX [W]        1     0.0000E+00
+ IP,ESH-FLUX  [W]        1     0.0000E+00
+      
+      
+  XI    0.0000000000000000     
+  XE    1.0000000000000000     
+ FLUX ONTO SOURCE SURFACE [A]            1   8474.4473721576505     
+      
+      
+ DEBUG: A            1   16.959002950954748       2147483646   12789.325572419575        0.0000000000000000     
+ DEBUG: A            2   27.988635169202912       2147483646   8474.4473721576505        0.0000000000000000     
+ DEBUG: A            3   28.000001000000001       2147483646   8.7327603518319421        0.0000000000000000     
+      
+      
+ LOOP OVER STRATA STARTS AT CPU TIME(SEC):    
+ STARTTIM     3.1349E-01
+ CPU TIME ASSIGNED TO STRATA (SEC) :          
+ PROPORTIONAL FLUX(ISTRA)                     
+ STRATUM, TIME           1     1.6646E+01
+ STRATUM, TIME           2     1.1030E+01
+ STRATUM, TIME           3     1.1366E-02
+      
+      
+      
+      
+ BEGIN TO WORK ON STRATUM NO.            1
+      
+      
+ NINITL(ISTRA) SET TO       142137
+ NEMOD1,NEMOD2,NEMOD3            3           0           0
+ SNORM     0.0000000000000000     
+ ISRFS,IICSOR(I),ITISOR(I),IFPSOR(I),IUPSOR(I)
+           1           1           0           0           0
+
+
+
+******************************************************                          
+*                                                    *                          
+*  LAUNCH PARTICLES FOR STRATUM NUMBER ISTRA=     1  *                          
+*                                                    *                          
+******************************************************                          
+
+
+
+ OVERHEAD     1.4720E-03
+ XTIM(ISTRA)=    16.960474950954747     
+      
+ NO FURTHER COMP.TIME AVAIL. FOR THIS STRATUM
+ M.C. HISTORIES FOLLOWED UNTIL THAT TIME FOR
+ THIS STRATUM
+ ISTRA,IPANU=            1    32260
+      
+      
+ TOTAL WEIGHT OF PRIMARY SOURCE PARTICLES 
+ BULK IONS, ATOMS, MOLECULES, TEST IONS 
+ WTPLS,WTATM,WTMOL,WTION,WTPHOT          
+  -3.2260E+04     0.0000E+00     0.0000E+00     0.0000E+00     0.0000E+00
+ TOTAL NUMBER OF MONTE CARLO HISTORIES
+ NPART       32260
+ TOTAL SOURCE STRENGTH FOR TEST PARTICLE SPECIES
+ FLUXT=       1.2789E+04
+      
+      
+      
+ EIRENE RECOMMENDED RESCALING OF VOLUME AVERAGED 
+ TALLIES DUE TO STATISTICAL ERRORS IN BALANCE 
+ FATM,FMOL,FION,FPHOT            
+   9.9531E-01     9.9759E-01     9.9057E-01     1.0000E+00
+      
+      
+      
+ RESCALING OF TRACKLENGTH TALLIES COMPLETED
+ RESCALING FACTORS:                        
+ FATM,FMOL,FION,FPHOT            
+   9.9531E-01     9.9759E-01     9.9057E-01     1.0000E+00
+      
+      
+ OUTUS1:           1           1           0       20050
+ OUTUS1:   12789.325572419575     
+   CHECKING PRESSURE GAUGES           1           1
+ GAUGE:           1           1           1   0.0000000000000000        0.0000000000000000     
+ GAUGE:           1           1           2   0.0000000000000000        0.0000000000000000     
+ GAUGE:           1           1           3   0.0000000000000000        0.0000000000000000     
+ GAUGE:           1           1           4   0.0000000000000000        0.0000000000000000     
+   DONE
+ CPU TIME USED UNTIL END OF STRATUM ISTRA 
+ ISTRA, CPU(S)            1   17.036344000000000     
+      
+      
+      
+      
+ BEGIN TO WORK ON STRATUM NO.            2
+      
+      
+ NINITL(ISTRA) SET TO       142154
+ NEMOD1,NEMOD2,NEMOD3            3           0           0
+ SNORM     0.0000000000000000     
+ ISRFS,IICSOR(I),ITISOR(I),IFPSOR(I),IUPSOR(I)
+           1           1           0           0           0
+
+
+
+******************************************************                          
+*                                                    *                          
+*  LAUNCH PARTICLES FOR STRATUM NUMBER ISTRA=     2  *                          
+*                                                    *                          
+******************************************************                          
+
+
+
+ OVERHEAD     7.6751E-02
+ XTIM(ISTRA)=    28.066858169202913     
+      
+ NO FURTHER COMP.TIME AVAIL. FOR THIS STRATUM
+ M.C. HISTORIES FOLLOWED UNTIL THAT TIME FOR
+ THIS STRATUM
+ ISTRA,IPANU=            2    16953
+      
+      
+ TOTAL WEIGHT OF PRIMARY SOURCE PARTICLES 
+ BULK IONS, ATOMS, MOLECULES, TEST IONS 
+ WTPLS,WTATM,WTMOL,WTION,WTPHOT          
+  -1.6953E+04     0.0000E+00     0.0000E+00     0.0000E+00     0.0000E+00
+ TOTAL NUMBER OF MONTE CARLO HISTORIES
+ NPART       16953
+ TOTAL SOURCE STRENGTH FOR TEST PARTICLE SPECIES
+ FLUXT=       8.4744E+03
+      
+      
+      
+ EIRENE RECOMMENDED RESCALING OF VOLUME AVERAGED 
+ TALLIES DUE TO STATISTICAL ERRORS IN BALANCE 
+ FATM,FMOL,FION,FPHOT            
+   9.9193E-01     9.9506E-01     1.0154E+00     1.0000E+00
+      
+      
+      
+ RESCALING OF TRACKLENGTH TALLIES COMPLETED
+ RESCALING FACTORS:                        
+ FATM,FMOL,FION,FPHOT            
+   9.9193E-01     9.9506E-01     1.0154E+00     1.0000E+00
+      
+      
+ OUTUS1:           2           2           1       20050
+ OUTUS1:   8474.4473721576505     
+   CHECKING PRESSURE GAUGES           2           1
+ GAUGE:           2           1           1   0.0000000000000000        0.0000000000000000     
+ GAUGE:           2           1           2   0.0000000000000000        0.0000000000000000     
+ GAUGE:           2           1           3   0.0000000000000000        0.0000000000000000     
+ GAUGE:           2           1           4   0.0000000000000000        0.0000000000000000     
+   DONE
+ CPU TIME USED UNTIL END OF STRATUM ISTRA 
+ ISTRA, CPU(S)            2   28.143094000000001     
+      
+      
+      
+      
+ BEGIN TO WORK ON STRATUM NO.            3
+      
+      
+ NINITL(ISTRA) SET TO       142205
+ NEMOD1,NEMOD2,NEMOD3            3           0           0
+ SNORM     0.0000000000000000     
+ ISRFS,IICSOR(I),ITISOR(I),IFPSOR(I),IUPSOR(I)
+           1           1           0           0           0
+
+
+
+******************************************************                          
+*                                                    *                          
+*  LAUNCH PARTICLES FOR STRATUM NUMBER ISTRA=     3  *                          
+*                                                    *                          
+******************************************************                          
+
+
+
+ OVERHEAD     7.6638E-02
+ XTIM(ISTRA)=    28.154862000000001     
+      
+ NO FURTHER COMP.TIME AVAIL. FOR THIS STRATUM
+ M.C. HISTORIES FOLLOWED UNTIL THAT TIME FOR
+ THIS STRATUM
+ ISTRA,IPANU=            3       31
+      
+      
+ TOTAL WEIGHT OF PRIMARY SOURCE PARTICLES 
+ BULK IONS, ATOMS, MOLECULES, TEST IONS 
+ WTPLS,WTATM,WTMOL,WTION,WTPHOT          
+  -3.1000E+01     0.0000E+00     0.0000E+00     0.0000E+00     0.0000E+00
+ TOTAL NUMBER OF MONTE CARLO HISTORIES
+ NPART          31
+ TOTAL SOURCE STRENGTH FOR TEST PARTICLE SPECIES
+ FLUXT=       8.7328E+00
+      
+      
+      
+ EIRENE RECOMMENDED RESCALING OF VOLUME AVERAGED 
+ TALLIES DUE TO STATISTICAL ERRORS IN BALANCE 
+ FATM,FMOL,FION,FPHOT            
+   1.1587E+00     1.2041E+00     9.4442E-01     1.0000E+00
+      
+      
+      
+ RESCALING OF TRACKLENGTH TALLIES COMPLETED
+ RESCALING FACTORS:                        
+ FATM,FMOL,FION,FPHOT            
+   1.1587E+00     1.2041E+00     9.4442E-01     1.0000E+00
+      
+      
+ OUTUS1:           3           3           1       20050
+ OUTUS1:   8.7327603518319421     
+   CHECKING PRESSURE GAUGES           3           1
+ GAUGE:           3           1           1   0.0000000000000000        0.0000000000000000     
+ GAUGE:           3           1           2   0.0000000000000000        0.0000000000000000     
+ GAUGE:           3           1           3   0.0000000000000000        0.0000000000000000     
+ GAUGE:           3           1           4   0.0000000000000000        0.0000000000000000     
+   DONE
+ CPU TIME USED UNTIL END OF STRATUM ISTRA 
+ ISTRA, CPU(S)            3   28.231508999999999     
+      
+      
+ ERROR IN OUTEIR: DATA FOR STRATUM ISTRA=            1
+ ARE NOT AVAILABLE. PRINTOUT ABANDONNED
+ ERROR IN OUTEIR: DATA FOR STRATUM ISTRA=            2
+ ARE NOT AVAILABLE. PRINTOUT ABANDONNED
+ ERROR IN OUTEIR: DATA FOR STRATUM ISTRA=            3
+ ARE NOT AVAILABLE. PRINTOUT ABANDONNED
+1         
+
+
+
+*************************************                                           
+*                                   *                                           
+*  THIS IS THE SUM OVER THE STRATA  *                                           
+*                                   *                                           
+*************************************                                           
+
+
+
+      
+ NUMBER OF MONTE-CARLO HISTORIES               
+ NHIST=       4.9244E+04
+      
+      
+      
+      
+      
+      
+ ========================================================================
+ ========================================================================
+ TALLY:   PARTICLE SOURCE (BULK IONS) FROM ATOM-PLASMA INTERACTION                
+ SPECIES: D+                      
+ UNITS:   AMP*CM**-3              
+ ========================================================================
+ ========================================================================
+      
+ BLOCK AVERAGE   1.1438E-03
+ ========================================================================
+      
+      
+      
+      
+ ========================================================================
+ ADDITIONAL CELLS 
+ ========================================================================
+    1    0.0000E+00
+      
+      
+      
+      
+ TOTAL ("UNITS*CM**3), AND MEAN VALUE ("UNITS") 
+ TOTAL, MEAN:         1.6727E+04     1.1438E-03
+      
+      
+      
+      
+      
+      
+                                
+ ===============================
+ = GLOBAL BALANCES (AMP/WATT) =
+ ===============================
+      
+      
+      
+ TEST PARTICLE INFLUX FROM  SOURCE (AMP)       
+ INFLUX/(1.602*E-19) IS THE "ATOMIC" FLUX, PART./S
+ INFLUX=      2.1273E+04
+      
+      
+ PARTICLE FLUX BALANCE (AMP), NEUTRAL ATOMS
+ ===========================================
+      
+ ATOMS FROM RECOMBINING BULK IONS               
+ PPATI  = 
+ D(N=1)    9.4930E+03
+ SUM OVER SPECIES                               
+ TOTAL=       9.4930E+03
+ ATOMS BORN BY ATOM - PLASMA INTERACTIONS       
+ PAATI  = 
+ D(N=1)   -1.6727E+04
+ SUM OVER SPECIES                               
+ TOTAL=      -1.6727E+04
+ ATOMS BORN BY MOLECULE - PLASMA INTERACTIONS   
+ PMATI  = 
+ D(N=1)    1.0624E+04
+ SUM OVER SPECIES                               
+ TOTAL=       1.0624E+04
+ ATOMS BORN BY TEST ION - PLASMA INTERACTIONS   
+ PIATI  = 
+ D(N=1)    4.1274E+03
+ SUM OVER SPECIES                               
+ TOTAL=       4.1274E+03
+ ATOMIC EFFLUX ONTO THE SURFACES                
+ POTATI = 
+ D(N=1)   -1.5845E+04
+ SUM OVER SPECIES                               
+ TOTAL=      -1.5845E+04
+ ATOMIC INFLUX FROM SURFACES, ORIG: ATOMS       
+ PRFAAI = 
+ D(N=1)    8.3275E+03
+ SUM OVER SPECIES                               
+ TOTAL=       8.3275E+03
+ ABSOLUTE ERRORS IN PARTICLE BALANCE            
+ DIFA =   
+ D(N=1)   -0.0000E+00
+ SUM OVER SPECIES                               
+ TOTAL=      -0.0000E+00
+ RELATIVE ERRORS IN PARTICLE BALANCE (%)        
+ DIFRA =  
+ D(N=1)   -0.0000E+00
+ SUM OVER SPECIES                               
+ TOTAL=      -0.0000E+00
+      
+      
+      
+      
+ PARTICLE FLUX BALANCE (AMP), NEUTRAL MOLECULES
+ ===============================================
+      
+ MOLECULES FROM RECOMBINING BULK IONS          
+ PPMLI  = 
+ D2        5.8898E+03
+ SUM OVER SPECIES                               
+ TOTAL=       5.8898E+03
+ MOLECULES BORN BY MOLECULE - PLASMA INTERACTIONS
+ PMMLI  = 
+ D2       -9.4626E+03
+ SUM OVER SPECIES                               
+ TOTAL=      -9.4626E+03
+ MOLECULAR EFFLUX ONTO THE SURFACES             
+ POTMLI = 
+ D2       -1.9143E+03
+ SUM OVER SPECIES                               
+ TOTAL=      -1.9143E+03
+ MOLECULAR INFLUX FROM SURFACES, ORIG: ATOMS    
+ PRFAMI = 
+ D2        3.5743E+03
+ SUM OVER SPECIES                               
+ TOTAL=       3.5743E+03
+ MOLECULAR INFLUX FROM SURFACES, ORIG: MOLECULES
+ PRFMMI = 
+ D2        1.9128E+03
+ SUM OVER SPECIES                               
+ TOTAL=       1.9128E+03
+ ABSOLUTE ERRORS IN PARTICLE BALANCE            
+ DIFM =   
+ D2        0.0000E+00
+ SUM OVER SPECIES                               
+ TOTAL=       0.0000E+00
+ RELATIVE ERRORS IN PARTICLE BALANCE (%)        
+ DIFRM =  
+ D2        0.0000E+00
+ SUM OVER SPECIES                               
+ TOTAL=       0.0000E+00
+      
+      
+      
+      
+ PARTICLE FLUX BALANCE (AMP), TEST IONS
+ =======================================
+      
+ TEST IONS BORN BY TEST ION - PLASMA INTERACTIONS
+ PIIOI  = 
+ D2+      -4.1051E+03
+ SUM OVER SPECIES                               
+ TOTAL=      -4.1051E+03
+ TEST IONS BORN BY MOLECULE - PLASMA INTERACTIONS
+ PMIOI  = 
+ D2+       4.1051E+03
+ SUM OVER SPECIES                               
+ TOTAL=       4.1051E+03
+ ABSOLUTE ERRORS IN PARTICLE BALANCE            
+ DIFI =   
+ D2+      -0.0000E+00
+ SUM OVER SPECIES                               
+ TOTAL=      -0.0000E+00
+ RELATIVE ERRORS IN PARTICLE BALANCE (%)        
+ DIFRI =  
+ D2+      -0.0000E+00
+ SUM OVER SPECIES                               
+ TOTAL=      -0.0000E+00
+      
+      
+ TRASH: TEST PARTICLES KILLED DUE TO ERRORS     
+ PTRASH=      0.0000E+00
+      
+      
+      
+ TOTAL ERROR IN PARTICLE FLUXBALANCE            
+ DIF: ABS, REL(%)     0.0000E+00     0.0000E+00
+      
+      
+ ENERGY FLUX BALANCE (WATT), NEUTRAL ATOMS
+ =========================================
+      
+ ENERGY FLUX FROM PRIMARY SOURCE                
+ ETOTA=       0.0000E+00
+ ENERGY FLUX FROM RECOMBINING BULK IONS         
+ EPATI=       3.2585E+05
+ ENERGY FLUX FROM ATOM PLASMA INTERACTION       
+ EAATI=      -6.9122E+04
+ ENERGY FLUX FROM MOLECULE PLASMA INTERACTIONS  
+ EMATI=       3.4943E+04
+ ENERGY FLUX FROM TEST ION PLASMA INTERACTIONS  
+ EIATI=       1.9360E+04
+ ENERGY FLUX ONTO NON TRANSPARENT SURFACES      
+ EOTATI=     -4.1725E+05
+ REFLECTED FROM NON TRANSPARENT SURFACES         
+ ERFATI=      1.0988E+05
+ ABSOLUTE AND RELATIVE ERROR IN BALANCE          
+ DIF: ABS, REL(%)     3.6567E+03     3.7450E-01
+      
+      
+ ENERGY FLUX BALANCE (WATT), NEUTRAL MOLECULES
+ =============================================
+      
+ FROM PRIMARY SOURCE                            
+ ETOTM =      0.0000E+00
+ FROM RECOMBINING BULK IONS                     
+ EPMLI=       4.5828E+02
+ ENERGY FLUX FROM MOLECULE PLASMA INTERACTIONS  
+ EMMLI =      2.4197E+03
+ ENERGY FLUX ONTO NON TRANSPARENT SURFACES      
+ EOTMLI=     -3.3112E+03
+ REFLECTED FROM NON TRANSPARENT SURFACES        
+ ERFMLI=      4.0886E+02
+ ABSOLUTE AND RELATIVE ERROR IN BALANCE          
+ DIF: ABS, REL(%)    -2.4347E+01    -3.6901E-01
+      
+      
+ ENERGY FLUX BALANCE (WATT), TEST IONS
+ =====================================
+      
+ FROM PRIMARY SOURCE                            
+ ETOTI =      0.0000E+00
+ ENERGY GAINED FROM MOLECULE PLASMA INTERACTIONS
+ EMIOI =      2.9551E+03
+ ENERGY GAINED FROM TEST ION PLASMA INTERACTIONS
+ EIIOI =     -2.8719E+03
+ REFLECTED FROM NON TRANSPARENT SURFACES        
+ ERFIOI=      0.0000E+00
+ ABSOLUTE AND RELATIVE ERROR IN BALANCE          
+ DIF: ABS, REL(%)     8.3191E+01     1.4277E+00
+      
+      
+ ETRASH: ENERGY ABSORBED DUE TO ERRORS          
+ ETRASH=      0.0000E+00
+      
+      
+      
+ TOTAL ERROR IN ENERGY FLUXBALANCE              
+ DIF: ABS, REL(%)     3.7155E+03     3.7575E-01
+      
+      
+ PARTICLE FLUX BALANCE (AMP), BULK IONS
+ =======================================
+      
+ BULK PARTICLE FLUX                             
+ (DEFINING THE TEST PARTICLE SOURCE             
+ STRENGTH (AMP))                                
+ PPPLI =  
+ D+       -2.1273E+04
+ SUM OVER SPECIES                               
+ TOTAL=      -2.1273E+04
+ BULK PARTICLES BORN BY ATOM PLASMA INTERACTIONS
+ PAPLI  = 
+ D+        1.6727E+04
+ SUM OVER SPECIES                               
+ TOTAL=       1.6727E+04
+ BULK IONS BORN BY MOLECULE PLASMA INTERACTIONS
+ PMPLI  = 
+ D+        9.1346E+01
+ SUM OVER SPECIES                               
+ TOTAL=       9.1346E+01
+ BULK IONS BORN BY TEST ION PLASMA INTERACTIONS
+ PIPLI  = 
+ D+        4.0829E+03
+ SUM OVER SPECIES                               
+ TOTAL=       4.0829E+03
+      
+      
+ TOTAL LOSS  ---  TOTAL GAIN                    
+ LOSS--GAIN          -2.1273E+04     2.0901E+04
+      
+      
+ ENERGY FLUX BALANCE (WATT), BULK IONS
+ =====================================
+      
+ BULK ION ENERGY FLUX  BEING                    
+ NEUTRALIZED  (DEFINING THE TEST PARTICLES      
+ SOURCE STRENGTH (WATT))                        
+ EPPLI=      -1.2334E+06
+ ENERGY GAIN DUE TO ATOM PLASMA INTERACTIONS  
+ EAPLI=       6.9122E+04
+ ENERGY GAIN FROM MOLECULE PLASMA INTERACTIONS  
+ EMPLI=      -7.8072E+03
+ ENERGY GAIN FROM TEST ION PLASMA INTERACTIONS  
+ EIPLI=       1.8090E+04
+      
+      
+ TOTAL LOSS  ---   TOTAL GAIN                   
+ LOSS--GAIN          -1.2334E+06     7.9404E+04
+      
+      
+ PARTICLE FLUX BALANCE (AMP), ELECTRONS
+ =======================================
+      
+ BULK ELECTRON PARTICLE FLUX BEING NEUTRALIZED  
+ PTOTE=      -2.1273E+04
+ ELECTRONS BORN BY ATOM PLASMA INTERACTIONS
+ PAELI=       1.6727E+04
+ ELECTRONS BORN BY MOLECULE PLASMA INTERACTIONS
+ PMELI=       4.1965E+03
+ ELECTRONS BORN BY TEST ION PLASMA INTERACTIONS
+ PIELI=      -2.2275E+01
+      
+      
+ TOTAL LOSS  ---  TOTAL GAIN                    
+ LOSS--GAIN          -2.1273E+04     2.0901E+04
+      
+      
+ ENERGY FLUX BALANCE (WATT), ELECTRONS
+ =====================================
+      
+ ENERGY GAIN DUE TO MOLECULE PLASMA INTERACTIONS
+ EMELI=      -1.2080E+05
+ ENERGY GAIN DUE TO TEST ION PLASMA INTERACTIONS
+ EIELI=      -4.2248E+04
+ TOTAL LOSS  ---   TOTAL GAIN                   
+ LOSS--GAIN          -1.6305E+05     0.0000E+00
+      
+      
+ SURFACES, AT WHICH TEST PARTICLES FLUXES ARE REDUCED
+ NO. SPECIES  PUMPED FLUX
+  -3 D(N=1)    3.6858E+02
+  -3 D2        1.4592E+00
+      
+1         
+ HERE IN OUTUSR
+ COPV:           1 F
+ LCOPV: F
+ SUMION:   1.3045195150877168E+023   20901.011670735399     
+* TEST ATOMS     0
+ sputtering sum_dat:   15939.696447661108        8377.4866816886624        9484.2417028679301     
+* TEST MOLECULES     1
+* TEST IONS - VOLUME TALLIES     0
+* PHOTONS     0
+      
+      
+
+
+
+**********************************************                                  
+*                                            *                                  
+*  SUBR. HALPHA CALLED, FOR SUM OVER STRATA  *                                  
+*                                            *                                  
+**********************************************                                  
+
+
+
+      
+  AFTER INTEGRATION OVER COMPUTATIONAL DOMAIN
+  TOTAL RADIATED POWER (WATT) BY HALPHA:   1756.6676469794936     
+  COUPL. TO GROUNDSTATE                :   1597.3111859449741     
+  COUPLING TO CONTINUUM                :  0.80211880453005280     
+  COUPLING TO MOLECULES                :   38.835031600038391     
+  COUPLING TO MOL.IONS                 :   119.68842080819286     
+  COUPLING TO NEG.IONS                 :   3.0889821778303329E-002
+  COUPLING TO FULCHER                  :   33.969784550747583     
+      
+      
+      
+      
+
+
+
+**********************************************                                  
+*                                            *                                  
+*  SUBR. HGAMMA CALLED, FOR SUM OVER STRATA  *                                  
+*                                            *                                  
+**********************************************                                  
+
+
+
+      
+  RADIATED POWER BY HGAMMA:   5720104903107.3213     
+  COUPL. TO GROUNDSTATE   :   5718636966902.4473     
+  COUPLING TO CONTINUUM   :   1467936202.0842032     
+  COUPLING TO MOLECULES   :  0.43827404310508356     
+  COUPLING TO MOL.IONS    :   2.3504138101012604     
+  COUPLING TO NEG.IONS    :   1.8961596684575555E-004
+      
+      
+      
+      
+
+
+
+*********************************************                                   
+*                                           *                                   
+*  SUBR. HBETA CALLED, FOR SUM OVER STRATA  *                                   
+*                                           *                                   
+*********************************************                                   
+
+
+
+      
+  RADIATED POWER BY HBETA:   3.7482629063534334E+030
+  COUPL. TO GROUNDSTATE   :   3.7482629063496915E+030
+  COUPLING TO CONTINUUM   :  0.40855439777347269     
+  COUPLING TO MOLECULES   :   3.7416667218938179E+018
+  COUPLING TO MOL.IONS    :   5464075414.1733789     
+  COUPLING TO NEG.IONS    :   62122.027011455735     
+      
+      
+* MISC
+ TABDS1:           1           1
+ TABDS1:           2           2
+* PARTICLE SOURCES
+* PUMPED FLUX
+* ITERATION DATA
+ ITERNO?           2

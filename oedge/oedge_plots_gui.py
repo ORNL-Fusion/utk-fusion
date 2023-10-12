@@ -235,7 +235,7 @@ class Window(tk.Frame):
 
         # Path to DIVIMP files on Shawn's computer.
         try:
-            initialdir = '/mnt/c/Users/Shawn/Documents/d3d_work/DIVIMP Runs/'
+            initialdir = '/mnt/c/Users/jmateja/Documents/DIVIMP Related/SAS-VW/'
             netcdf_path = tk.filedialog.askopenfilename(filetypes=(('NetCDF files', '*.nc'),), initialdir=initialdir)
         except:
             netcdf_path = tk.filedialog.askopenfilename(filetypes=(('NetCDF files', '*.nc'),))

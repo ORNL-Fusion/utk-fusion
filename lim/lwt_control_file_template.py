@@ -42,7 +42,7 @@ except:
 #-------------#
 # Header Info #
 #-------------#
-lwt_control_root = "/path/to/working/directory/shot/"
+lwt_control_root = "/mnt/c/Users/jmateja/Documents/SASVWlim/lim190424/"
 
 #----------------------------------------------#
 # Option 1: Generate a 3D wall file for MAFOT. #
@@ -62,16 +62,16 @@ gif_path          = "wall_gif/wall.gif"  # Must create a folder called wall_gif.
 # One way to make it work is file1 can contains all the connection lengths in
 # the positive 3DLIM direction (i.e. that which replaces surface 1, L19 in the
 # 3DLIM input file), and file2 be the negative values (surface 2, L21).
-mafot_file1    = "lam_hires_tor240_conn+1.dat"  # CCW, Reverse = [ITF/OTF]
-mafot_file2    = "lam_hires_tor240_conn-1.dat"  # CW,  Reverse = [ITF/OTF]
-toroidal_angle = 240                            # MiMES = 240.
+mafot_file1    = "/mnt/c/Users/jmateja/Documents/SASVWlim/lim190424/DCP/lam_190424_150_conn-1.dat"  # CCW, Reverse = [ITF/OTF]
+mafot_file2    = "/mnt/c/Users/jmateja/Documents/SASVWlim/lim190424/DCP/lam_190424_150_conn+1.dat"  # CW,  Reverse = [ITF/OTF]
+toroidal_angle = 150                            # MiMES = 240.
 
 # The R bins for 3DLIM. Can have them already set or set here and copy/paste
 # into 3DLIM input file. Do not forget cap (the X location of the "center of the
 # plasma" as input in the 3DLIM input file)!!! If you forget this you'll get
 # weird behavior.
-lim_rbins = np.arange(-0.1, 0.03, 0.0025)
-cap = 0.03
+lim_rbins = np.arange(-0.0425, 0.015, 0.0025)
+cap = 0.015
 lim_rbins = np.append(lim_rbins, cap)
 
 # The number of Pbins MUST match 2*MAXNPS+1 in 3DLIM, otherwise it will not
@@ -86,20 +86,22 @@ lim_pbins = np.append(lim_pbins, tmp[::-1])
 
 # In machine coordinates, where do you want the origin of 3DLIM to be?
 # MiMES-like origin.
-r_origin2 = 2.282    # Often just the R of the CP tip (with any possible shift).
-z_origin2 = -0.188
+#r_origin2 = 2.278    # Often just the R of the CP tip (with any possible shift).
+#z_origin2 = -0.188
 # DiMES-like origin.
-#r_origin2 = 1.485
-#z_origin2 = -1.15
+r_origin2 = 1.486
+z_origin2 = -1.205
 
 # Which machine coordinate does the 3DLIM "R" coordinate go along?
 # MiMES = "R", DiMES = "Z" and None will set it along the actual R-Rsep
 # direction (i.e. the plasma radial direction, but not implemented yet).
-along_coord2 = "R"
+
+#along_coord2 = "R"
+along_coord2 = "Z"
 
 # Must have .bound extension, i.e. 184527_conns.bound or ramp.bound are okay.
-output_bounds_file = "167196_tor240_a2_v3.bound"
-gfile_pickle_path2 = "167196_3500.pickle"
+output_bounds_file = "190424_3000_tor150_dcp_v1.bound"
+gfile_pickle_path2 = "190424_3000.pickle"
 wall_path2         = "mafot_3D_wall.dat"
 
 
@@ -122,15 +124,22 @@ gfile_pickle_path3 = "184527_3500.pickle"
 #------------------------------------------------------------------------------#
 # Option 4: Generate 3DLIM probability distribution for input from a DIVIMP run.
 #------------------------------------------------------------------------------#
-divimp_nc_path = "/path/to/divimp/run.nc"
+divimp_nc_path = "/mnt/c/Users/jmateja/Documents/DIVIMP Related/SAS-VW/190424/424_inj_files/drifts_launches/d3d-190424-inj-9d.nc"
 
 # The R of the flux tube you want the probability distribution for.
 z_fluxtube     = -0.188
-r_fluxtube     = 2.282 - 0.02
+r_fluxtube     = 2.295 - 0.022
 show_plot      = True
 reverse        = False
 smooth         = True
 smooth_window  = 15
+# DCP
+#z_fluxtube     = -1.205 + 0.015
+#r_fluxtube     = 1.486
+#show_plot      = True
+#reverse        = False
+#smooth         = True
+#smooth_window  = 15
 
 
 #-------------#

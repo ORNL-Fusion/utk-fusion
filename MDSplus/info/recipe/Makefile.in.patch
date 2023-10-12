@@ -1,0 +1,45 @@
+diff --git a/Makefile.in b/Makefile.in
+index 3a4d7e7d6..8881bf770 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -23,7 +23,6 @@ MOTIF_APS = xmdsshr \
+ 	    actions \
+ 	    dwscope \
+ 	    @IDLMDSWIDGETS@ \
+-            mitdevices \
+             traverser
+ 
+ HDF5_APS = hdf5
+@@ -34,7 +33,6 @@ PARTS = \
+ mdsshr \
+         treeshr \
+         tdishr \
+-        tditest \
+ 	xtreeshr \
+         @MDSTCPIP@ \
+         mdslibidl \
+@@ -46,7 +44,6 @@ mdsshr \
+         tcl \
+         @TDIC@ \
+         mdslib \
+-        math \
+         wfevent \
+         setevent \
+         mdsmisc \
+@@ -173,7 +170,7 @@ install: $(install_DIRS)
+ 	tar -C ${top_builddir} -cf - include/config.h | (cd $(exec_prefix); tar -xf -) ## TODO: remove this and config.h from headers ...
+ 	if [ ! -z "$$MDSPLUS_VERSION" ]; then echo "mdsplus_version='$$MDSPLUS_VERSION'" > $(exec_prefix)/mdsobjects/python/mdsplus_version.py; fi
+ 	$(INSTALL) ${top_srcdir}/MDSplus-License.txt ${top_srcdir}/MDSplus-License.rtf $(exec_prefix)
+-	(cd $(exec_prefix); chmod -R 755 $(MISC_PARTS))
++	(cd $(exec_prefix); chmod -R 755 $(MISC_PARTS) || exit 0)
+ 
+ .PHONY: tests-envdump
+ tests-envdump:
+@@ -215,7 +212,6 @@ servershr: mdsdcl tdishr treeshr mdsshr mdstcpip
+ setevent: mdsshr
+ tdic: mdstcpip
+ tdishr: mdsshr treeshr
+-tditest: tdishr
+ traverser: xmdsshr
+ treeshr: mdsshr
+ wfevent: tdishr mdsshr

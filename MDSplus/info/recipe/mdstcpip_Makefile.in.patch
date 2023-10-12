@@ -1,0 +1,13 @@
+diff --git a/mdstcpip/Makefile.in b/mdstcpip/Makefile.in
+index 45e4ab072..faa4d4ca5 100644
+--- a/mdstcpip/Makefile.in
++++ b/mdstcpip/Makefile.in
+@@ -29,7 +29,7 @@ CFLAGS += $(THREAD) $(COMPRESSION_SWITCH) -I@srcdir@/udt4/src -I@srcdir@/udt4/ud
+ LDFLAGS += $(THREAD)
+ 
+ CXXFLAGS=-Wno-deprecated -fPIC -finline-functions -fno-strict-aliasing $(CFLAGS) @CXXFLAGS@
+-LIBS=@LIBS@ @LIBRESOLV@ $(LIBSOCKET)
++LIBS += @LIBRESOLV@ $(LIBSOCKET) $(XML_LIBS)
+ 
+ MdsIpShr    = @MAKESHLIBDIR@@LIBPRE@MdsIpShr@SHARETYPE@ $(IMPLIB_MdsIpShr)
+ MdsIpSrvShr = @MAKESHLIBDIR@@LIBPRE@MdsIpSrvShr@SHARETYPE@ $(IMPLIB_MdsIpSrvShr)

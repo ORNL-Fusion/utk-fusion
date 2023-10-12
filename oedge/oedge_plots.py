@@ -561,7 +561,7 @@ class OedgePlots:
     def plot_contour_polygon(self, dataname, charge=None, scaling=1.0,
                              normtype='linear', cmap='plasma', xlim=(0.9, 2.4),
                              ylim=(-1.4, 1.4), plot_sep=True, levels=None,
-                             cbar_label=None, fontsize=16, lut=21,
+                             cbar_label=None, fontsize=30, lut=21,
                              smooth_cmap=False, vmin=None, vmax=None,
                              show_cp=None, ptip=None, show_mr=False,
                              fix_fill=False, own_data=None, no_core=False,
@@ -623,7 +623,8 @@ class OedgePlots:
             show_cp = [show_cp]
         if type(ptip) is not list:
             ptip = [ptip]
-
+        
+        mpl.rc('font', size = 24)
         # Option to provide own dataset from read_data_2d, say like a ratio
         # between two of them or something that you calculated ahead of itme.
         if own_data is not None:
@@ -787,7 +788,7 @@ class OedgePlots:
             cbar.ax.set_ylabel(cbar_label, fontsize=fontsize)
 
         # A bit larger colorbar tick label font size.
-        cbar.ax.tick_params(labelsize=14)
+        cbar.ax.tick_params(labelsize=30)
 
         # Option to add collector probes to plots.
         if show_cp:

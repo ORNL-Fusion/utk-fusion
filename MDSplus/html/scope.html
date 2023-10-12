@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<title>Webscope</title>
+<link rel="icon" href="http://www.mdsplus.org/favicon.ico" />
+<style>
+html {
+  font-family: "Arial", sans-serif;
+}
+table th, table tr {
+  padding: 0;
+}
+table { 
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.WavePanel, .FramePanel {
+  font-size: 0;
+  position: relative;
+}
+.FramePanel {
+  background-color: #ddd;
+}
+#WavePanelPopup, #FramePanelPopup {
+  display: none;
+  background-color: gold;
+  opacity: .8;
+  position: absolute;
+  z-index: 3;
+}
+#WavePanelPopup button, #FramePanelPopup button {
+  padding: 0;
+  width: 100%;
+}
+canvas, .FramePanelSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.FramePanelSvg {
+  z-index: 2;
+  /* Workaround for IE10 not firing mouse events on an "invisible" element: sets a transparent image as background */
+  background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+}
+</style>
+
+<script type="text/javascript" src="JavaScripts/mdsScope.js"></script>
+</head>
+<body>
+
+<div id="WavePanelPopup">
+<table border="0">
+	<tr>
+		<th><button type="button" onclick="autoscale()">Autoscale</button></th>
+		<th><button type="button" onclick="autoscaleY()">Autoscale Y</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" onclick="autoscaleAll()">Autoscale All</button></th>
+		<th><button type="button" onclick="allSameScale()">All same scale</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" onclick="allSameXScale()">All same X scale</button></th>
+		<th><button type="button" onclick="allSameXScaleAutoY()">All same X scale auto Y</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" onclick="allSameYScale()">All same Y scale</button></th>
+		<th><button type="button" onclick="resetScales()">Reset scales</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" onclick="resetAllScales()">Reset all scales</button></th>
+		<th><button type="button" onclick="undoZoom()" id="UndoZoomButton" disabled>Undo zoom</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" onclick="document.getElementById('WavePanelPopup').style.display='none'">Dismiss</button></th>
+	</tr>
+</table>
+</div>
+
+<div id="FramePanelPopup">
+<table border="0">
+	<tr>
+		<th><button type="button" onclick="startPlay()" id="FramePlayButton">Start play</button></th>
+		<th><button type="button" onclick="autoscale()">Autoscale</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" onclick="autoscaleAllImages()">Autoscale All Images</button></th>
+		<th><button type="button" onclick="document.getElementById('FramePanelPopup').style.display='none'">Dismiss</button></th>
+	</tr>
+</table>
+</div>
+
+<div id="ScopeArea"></div>
+
+<script type="text/javascript">
+window.onresize = function(){resizeScope()};
+window.onload = function() {
+	var configIdx = location.search.indexOf('config=');
+	if(configIdx > 0)
+	{
+	    var shotIdx = location.search.indexOf('shot=');
+	    if(shotIdx > 0)
+	    {
+		var shotName = location.search.substr(shotIdx+5);
+		startMdsScope(location.search.substring(configIdx+7, location.search.indexOf('&')), shotName)
+	    }
+	    else
+	    	startMdsScope(location.search.substr(location.search.indexOf('=')+1), "");
+	}
+};
+</script>
+
+</body>
+</html>

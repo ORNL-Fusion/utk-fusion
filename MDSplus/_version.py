@@ -1,0 +1,5 @@
+version="1.0.0"
+branch="unknown"
+commit="unknown"
+release_tag="_release-1-0-0"
+release_date="Thu Aug 19 06:29:02 UTC 2021"

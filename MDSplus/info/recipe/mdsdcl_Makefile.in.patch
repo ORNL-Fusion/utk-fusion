@@ -1,0 +1,13 @@
+diff --git a/mdsdcl/Makefile.in b/mdsdcl/Makefile.in
+index 10c149cf7..74da807b5 100644
+--- a/mdsdcl/Makefile.in
++++ b/mdsdcl/Makefile.in
+@@ -58,7 +58,7 @@ cmdParseLex.o: cmdParseLex.c
+ 	$(LINK.c) $(OUTPUT_OPTION) @LINKSHARED@ $^ -L@MAKESHLIBDIR@ -lMdsShr $(LIBS) $(MAKE_IMPLIB) $(THREAD) $(XML_LIBS) @LIBREADLINE@
+ 
+ @MAKEBINDIR@mdsdcl$(EXE): mdsdcl.c @MAKESHLIBDIR@@LIBPRE@Mdsdcl@SHARETYPE@ $(IMPLIB) 
+-	$(LINK.c) $(OUTPUT_OPTION) $<  -L@MAKESHLIBDIR@ -lMdsdcl -lMdsShr $(LIBS) @LIBREADLINE@
++	$(LINK.c) $(OUTPUT_OPTION) $<  -L@MAKESHLIBDIR@ -lMdsdcl -lMdsShr $(LIBS) @LIBREADLINE@ $(XML_LIBS)
+ 
+ #cmdParse.tab.c: cmdParse.y
+ #        bison cmdParse.y
